@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,10 +16,7 @@ interface Tweet {
 const MAX_TWEET_LENGTH = 160;
 
 export function ThreadComposer() {
-  useEffect(() => {
-    console.log(session)
-  }, [])
-  
+
   const { data: session } = useSession(); // Fetch user session
   const [content, setContent] = useState("");
   const [tweets, setTweets] = useState<Tweet[]>([]);
@@ -69,7 +66,6 @@ export function ThreadComposer() {
   const handleSubmit = async () => {
     if (!session) {
       console.error("User not authenticated.");
-      console.log(session)
       return;
     }
 
