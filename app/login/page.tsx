@@ -4,10 +4,10 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
-
+import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const { data: session, status } = useSession();
-
+  const router = useRouter(); 
   if (status === "loading") {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -36,6 +36,9 @@ export default function LoginPage() {
               <Button onClick={() => signOut()} className="w-full bg-red-500 hover:bg-red-600">
                 Sign Out
               </Button>
+              <Button onClick={()=>{
+              router.push('/thread');
+              }}>Threads Page</Button>
             </>
           ) : (
             <Button onClick={() => signIn("twitter")} className="w-full">
