@@ -3,10 +3,14 @@ import { NextResponse } from "next/server";
 import { TwitterApi, SendTweetV2Params } from "twitter-api-v2";
 
 // Function to create a Twitter API client dynamically for each user
-async function getTwitterClient(userAccessToken: string, userAccessSecret: string) {
+async function getTwitterClient(userAccessToken: string, userAccessSecret: string): Promise<TwitterApi> {
+  if (!process.env.TWITTER_API_KEY || !process.env.TWITTER_API_SECRET) {
+    throw new Error('Twitter API credentials are not configured');
+  }
+  
   return new TwitterApi({
-    appKey: process.env.TWITTER_API_KEY!,
-    appSecret: process.env.TWITTER_API_SECRET!,
+    appKey: process.env.TWITTER_API_KEY,
+    appSecret: process.env.TWITTER_API_SECRET,
     accessToken: userAccessToken,
     accessSecret: userAccessSecret,
   });
@@ -39,13 +43,13 @@ export async function POST(request: Request) {
     let i = 0;
 
     while (formData.has(`tweets[${i}][content]`)) {
-      const tweetText = formData.get(`tweets[${i}][content]`) as string | null;
-      if (!tweetText) continue;
+      const tweetText = formData.get(`tweets[${i}][content]`);
+      if (!tweetText || typeof tweetText !== 'string') continue;
 
       const tweet: SendTweetV2Params = { text: tweetText };
-      const imageFile = formData.get(`tweets[${i}][imageFile]`) as File | null;
+      const imageFile = formData.get(`tweets[${i}][imageFile]`);
 
-      if (imageFile && imageFile.size > 0) {
+      if (imageFile && imageFile instanceof File && imageFile.size > 0) {
         try {
           console.log(`Uploading image for tweet ${i}...`);
           const buffer = Buffer.from(await imageFile.arrayBuffer());

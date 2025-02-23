@@ -1,20 +1,32 @@
 import { NextResponse } from "next/server";
 import { createClient } from '@supabase/supabase-js';
-import { access } from "fs";
+
+interface ThreadData {
+  userId: string;
+  title: string;
+  content: string;
+  scheduledAt?: string;
+  accessToken?: string;
+  accessSecret?: string;
+}
 
 // Log environment variables at startup
 console.log('Checking Supabase environment variables...');
 console.log('PUBLIC_SUPABASE_URL:', process.env.PUBLIC_SUPABASE_URL ? 'Present' : 'Missing');
 console.log('PUBLIC_SUPABASE_ANON_KEY:', process.env.PUBLIC_SUPABASE_ANON_KEY ? 'Present' : 'Missing');
 
-const supabaseUrl = process.env.PUBLIC_SUPABASE_URL!;
-const supabaseServiceKey = process.env.PUBLIC_SUPABASE_ANON_KEY!;
+if (!process.env.PUBLIC_SUPABASE_URL || !process.env.PUBLIC_SUPABASE_ANON_KEY) {
+  throw new Error('Supabase environment variables are not configured');
+}
 
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
+const supabase = createClient(
+  process.env.PUBLIC_SUPABASE_URL,
+  process.env.PUBLIC_SUPABASE_ANON_KEY
+);
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
+    const body = await request.json() as ThreadData;
     console.log("Incoming Request Body:", body);
 
     const { userId, title, content, scheduledAt, accessToken, accessSecret } = body;
@@ -82,6 +94,9 @@ export async function POST(request: Request) {
     }
 
     console.log("Thread saved successfully:", data);
+    if (!data || data.length === 0) {
+      return NextResponse.json({ success: false, error: "No data returned from database" }, { status: 500 });
+    }
     return NextResponse.json({ success: true, thread: data[0] });
 
   } catch (error) {

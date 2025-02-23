@@ -2,13 +2,30 @@ import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { TwitterApi, SendTweetV2Params } from "twitter-api-v2";
 
+interface ThreadContent {
+  content: string;
+  imageFile?: File;
+}
+
+interface Thread {
+  id: string;
+  user_id: string;
+  content: ThreadContent[];
+  scheduled_time: string;
+  is_posted: boolean;
+  accessToken?: string;
+  access_token?: string;
+  accessSecret?: string;
+  access_secret?: string;
+}
+
 // Initialize Supabase
 const supabase = createClient(
   process.env.PUBLIC_SUPABASE_URL!,
   process.env.PUBLIC_SUPABASE_ANON_KEY!
 );
 
-async function getTwitterClient(userAccessToken: string, userAccessSecret: string) {
+async function getTwitterClient(userAccessToken: string, userAccessSecret: string): Promise<TwitterApi> {
   return new TwitterApi({
     appKey: process.env.TWITTER_API_KEY!,
     appSecret: process.env.TWITTER_API_SECRET!,
@@ -27,7 +44,8 @@ export async function GET() {
       .select("*")
       .lte("scheduled_time", new Date().toISOString()) // Only tweets scheduled until now
       .eq("is_posted", false)
-      .order("scheduled_time", { ascending: true });
+      .order("scheduled_time", { ascending: true })
+      .returns<Thread[]>();
 
     if (error) {
       console.error("Error fetching scheduled tweets:", error);
@@ -57,7 +75,7 @@ export async function GET() {
 
         // Convert thread.content (an array) to a payload for tweetThread.
         // Each element should have a 'text' property.
-        const tweetsPayload: SendTweetV2Params[] = thread.content.map((t: { content: string; imageFile?: File }) => ({
+        const tweetsPayload: SendTweetV2Params[] = thread.content.map((t: ThreadContent) => ({
           text: t.content,
         }));
 
