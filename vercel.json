@@ -1,9 +1,0 @@
-{
-    "cron": [
-      {
-        "path": "/api/schedule",
-        "schedule": "*/5 * * * *"
-      }
-    ]
-  }
-  
