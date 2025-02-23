@@ -1,3 +1,4 @@
+'use client';
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,67 +19,73 @@ import {
   BookOpen
 } from "lucide-react";
 
+
+
+import { AnimatedHero } from './components/animated-hero';
+import { motion } from 'framer-motion';
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="py-20 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
-        <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-8">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-              Create Engaging{" "}
-              <span className="text-primary">Twitter Threads</span>
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Design, write, and schedule your Twitter threads with our powerful thread creator
-            </p>
-            <div className="flex justify-center gap-4">
-              <Button asChild size="lg">
-                <Link href="/thread">
-                  Create Thread
-                  <PenTool className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <AnimatedHero />
 
       {/* Main Navigation Cards */}
       <section className="py-20 px-4 md:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {navigationCards.map((card, index) => (
-              <Link href={card.href} key={index}>
-                <Card className="h-full hover:shadow-lg transition-shadow cursor-pointer">
-                  <CardHeader>
-                    <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-lg bg-primary/10">
-                        <card.icon className="h-6 w-6 text-primary" />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+              >
+                <Link href={card.href}>
+                  <Card className="h-full transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 cursor-pointer">
+                    <CardHeader>
+                      <div className="flex items-center gap-4">
+                        <motion.div 
+                          className="p-3 rounded-lg bg-primary/10"
+                          whileHover={{ rotate: 5 }}
+                        >
+                          <card.icon className="h-6 w-6 text-primary" />
+                        </motion.div>
+                        <div>
+                          <CardTitle className="text-xl font-semibold">{card.title}</CardTitle>
+                          <CardDescription className="text-sm text-muted-foreground">{card.description}</CardDescription>
+                        </div>
                       </div>
-                      <div>
-                        <CardTitle>{card.title}</CardTitle>
-                        <CardDescription>{card.description}</CardDescription>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {card.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2">
-                          <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                          <span className="text-muted-foreground">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {card.features.map((feature, idx) => (
+                          <motion.li 
+                            key={idx} 
+                            className="flex items-center gap-2"
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: (index * 0.1) + (idx * 0.05) }}
+                          >
+                            <motion.div 
+                              className="h-1.5 w-1.5 rounded-full bg-primary"
+                              whileHover={{ scale: 1.5 }}
+                            />
+                            <span className="text-muted-foreground hover:text-primary transition-colors">{feature}</span>
+                          </motion.li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 

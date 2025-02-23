@@ -66,11 +66,17 @@ export async function GET() {
 
         console.log("Tweet thread posted successfully:", response);
 
-        // Mark thread as posted in the database
-        await supabase
+        // Delete thread from the database after successful posting
+        const { error: deleteError } = await supabase
           .from("threads")
-          .update({ is_posted: true })
+          .delete()
           .eq("id", thread.id);
+
+        if (deleteError) {
+          console.error(`Error deleting thread ${thread.id}:`, deleteError);
+        } else {
+          console.log(`Thread ${thread.id} deleted successfully.`);
+        }
       } catch (tweetError) {
         console.error(`Error posting tweet for thread ${thread.id}:`, tweetError);
       }
