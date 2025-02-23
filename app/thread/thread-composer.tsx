@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ReplyIcon, Hash, Scissors, HelpCircle, ImageIcon, SaveIcon, Loader2 } from "lucide-react";
 import { ThreadPreview } from "./thread-preview";
 import { motion, AnimatePresence } from "framer-motion";
+import { access } from "fs";
 
 interface Tweet {
   content: string;
@@ -109,6 +110,8 @@ export function ThreadComposer() {
           userId: session.user.email,
           title: title.trim(),
           content: tweets,
+          accessToken: session.accessToken,
+          accessSecret: session.accessSecret,
         }),
       });
 

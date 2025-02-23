@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from '@supabase/supabase-js';
+import { access } from "fs";
 
 // Log environment variables at startup
 console.log('Checking Supabase environment variables...');
@@ -13,35 +14,84 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 export async function POST(request: Request) {
   try {
-    const { userId, title, content } = await request.json();
+    const body = await request.json();
+    console.log("Incoming Request Body:", body);
 
-    if (!userId) {
-      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
+    const { userId, title, content, scheduledAt, accessToken, accessSecret } = body;
+
+    if (!userId || !title) {
+      console.error("Missing required fields: userId or title");
+      return NextResponse.json({ error: "User ID and Title are required" }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from('threads')
-      .insert([
-        {
-          user_id: userId,
-          title,
-          content
-        }
-      ])
-      .select();
+    let scheduledTime = null;
+    if (scheduledAt) {
+      const parsedDateTime = new Date(scheduledAt);
+      if (isNaN(parsedDateTime.getTime())) {
+        console.error("Invalid scheduledAt value:", scheduledAt);
+        return NextResponse.json({ error: "Invalid date/time format" }, { status: 400 });
+      }
+      scheduledTime = parsedDateTime.toISOString();
+    }
+
+    console.log("Checking for existing thread...");
+    const { data: existingThread, error: fetchError } = await supabase
+      .from("threads")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("title", title)
+      .single();
+
+    console.log("Existing Thread Check Result:", existingThread, "Fetch Error:", fetchError);
+
+    if (fetchError && fetchError.code !== "PGRST116") {
+      console.error("Error checking for existing thread:", fetchError);
+      return NextResponse.json({ error: fetchError.message }, { status: 500 });
+    }
+
+    let data, error;
+
+    if (existingThread) {
+      console.log("Updating existing thread...");
+      ({ data, error } = await supabase
+        .from("threads")
+        .update({ content, scheduled_time: scheduledTime })
+        .eq("id", existingThread.id)
+        .eq("user_id", userId)
+        .select());
+    } else {
+      console.log("Inserting new thread...");
+      ({ data, error } = await supabase
+        .from("threads")
+        .insert([
+          {
+            user_id: userId,
+            title,
+            content,
+            scheduled_time: scheduledTime,
+            accessToken,
+            accessSecret,
+          },
+        ])
+        .select());
+    }
 
     if (error) {
-      console.error('Error saving thread:', error);
+      console.error("Error saving thread:", error);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
+    console.log("Thread saved successfully:", data);
     return NextResponse.json({ success: true, thread: data[0] });
 
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error("Unexpected Error:", error);
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
+
+
+
 
 export async function GET(request: Request) {
   try {
