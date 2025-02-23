@@ -1,5 +1,6 @@
 import { ThreadComposer } from "./thread-composer"
 import { Header } from "./header"
+import { SavedThreads } from "./saved-threads"
 
 export default function ThreadPage() {
   return (
@@ -7,6 +8,7 @@ export default function ThreadPage() {
       <Header />
       <main className="container mx-auto px-4 py-6">
         <ThreadComposer />
+        <SavedThreads />
       </main>
     </div>
   )
