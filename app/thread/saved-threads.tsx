@@ -70,47 +70,53 @@ export function SavedThreads() {
   }, [session]);
 
   const handleSchedule = async (date: Date) => {
-    if (!session?.user?.email) return;
-
-    // Get the title from the selected thread if updating; otherwise, use a default title.
+    if (!session?.user?.email || !selectedThreadId) {
+      console.error("Error: Missing user ID or thread ID");
+      return;
+    }
+  
     const selectedThread = threads.find((t) => t.id === selectedThreadId);
-    const threadTitle = selectedThread ? selectedThread.title : "New Thread Title";
-
+    if (!selectedThread) {
+      console.error("Error: Thread not found for scheduling");
+      return;
+    }
+  
     try {
       const response = await fetch("/api/thread/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          threadId: selectedThreadId || null,
-          title: threadTitle,
-          content: selectedThreadId ? undefined : [],
+          threadId: selectedThreadId,
+          title: selectedThread.title,  // Ensure title exists
+          content: selectedThread.content,
           scheduledAt: date.toISOString(),
           userId: session.user.email,
         }),
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to schedule thread: ${errorText}`);
       }
-
+  
       const { thread } = await response.json();
       console.log("Scheduled thread response:", thread);
-
-      // Update the thread in state with the new scheduled_time
+  
+      // Update state with scheduled time
       setThreads((prevThreads) =>
         prevThreads.map((t) =>
-          t.id === selectedThreadId ? { ...t, scheduled_time: thread.scheduled_time || null } : t
+          t.id === selectedThreadId ? { ...t, scheduled_time: thread.scheduled_time } : t
         )
       );
-
+  
       console.log("Thread scheduled for:", date);
     } catch (error) {
       console.error("Error scheduling thread:", error);
     }
-
+  
     setIsScheduleModalOpen(false);
   };
+  
 
   const handleEdit = (thread: Thread) => {
     const parsedContent =

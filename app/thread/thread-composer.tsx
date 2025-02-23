@@ -87,19 +87,31 @@ export function ThreadComposer() {
       console.error("User not authenticated.");
       return;
     }
-
+  
     if (!title.trim()) {
       alert("Please enter a title for your thread");
       return;
     }
-
+  
     if (tweets.length === 0) {
       alert("Please add at least one tweet to your thread");
       return;
     }
-
+  
     try {
       setIsSaving(true);
+  
+      // Convert images to base64
+      const tweetsWithBase64 = await Promise.all(
+        tweets.map(async (tweet) => {
+          if (tweet.imageFile) {
+            const base64Image = await convertFileToBase64(tweet.imageFile);
+            return { content: tweet.content, imageBase64: base64Image };
+          }
+          return { content: tweet.content };
+        })
+      );
+  
       const response = await fetch("/api/thread/save", {
         method: "POST",
         headers: {
@@ -108,16 +120,16 @@ export function ThreadComposer() {
         body: JSON.stringify({
           userId: session.user.email,
           title: title.trim(),
-          content: tweets,
+          content: tweetsWithBase64,
           accessToken: session.accessToken,
           accessSecret: session.accessSecret,
         }),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to save thread");
       }
-
+  
       const data = await response.json();
       console.log("Thread saved:", data);
       setTitle("");
@@ -127,6 +139,17 @@ export function ThreadComposer() {
       setIsSaving(false);
     }
   };
+  
+  // Utility function to convert a file to Base64
+  const convertFileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+  
 
   const handleSubmit = async () => {
     if (!session) {

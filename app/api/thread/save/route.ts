@@ -1,10 +1,15 @@
 import { NextResponse } from "next/server";
 import { createClient } from '@supabase/supabase-js';
 
+interface ThreadContent {
+  content: string;
+  imageBase64?: string;
+}
+
 interface ThreadData {
   userId: string;
   title: string;
-  content: string;
+  content: ThreadContent[];
   scheduledAt?: string;
   accessToken?: string;
   accessSecret?: string;
@@ -31,7 +36,7 @@ export async function POST(request: Request) {
 
     const { userId, title, content, scheduledAt, accessToken, accessSecret } = body;
 
-    if (!userId || !title) {
+    if (!userId || !title || !Array.isArray(content)) {
       console.error("Missing required fields: userId or title");
       return NextResponse.json({ error: "User ID and Title are required" }, { status: 400 });
     }
@@ -67,7 +72,7 @@ export async function POST(request: Request) {
       console.log("Updating existing thread...");
       ({ data, error } = await supabase
         .from("threads")
-        .update({ content, scheduled_time: scheduledTime })
+        .update({ content, scheduled_time: scheduledTime, is_posted: false })
         .eq("id", existingThread.id)
         .eq("user_id", userId)
         .select());
@@ -83,6 +88,7 @@ export async function POST(request: Request) {
             scheduled_time: scheduledTime,
             accessToken,
             accessSecret,
+            is_posted: false,
           },
         ])
         .select());

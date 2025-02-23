@@ -4,7 +4,7 @@ import { TwitterApi, SendTweetV2Params } from "twitter-api-v2";
 
 interface ThreadContent {
   content: string;
-  imageFile?: File;
+  imageBase64?: string;
 }
 
 interface Thread {
@@ -75,9 +75,26 @@ export async function GET() {
 
         // Convert thread.content (an array) to a payload for tweetThread.
         // Each element should have a 'text' property.
-        const tweetsPayload: SendTweetV2Params[] = thread.content.map((t: ThreadContent) => ({
-          text: t.content,
-        }));
+        const tweetsPayload: SendTweetV2Params[] = [];
+        
+        // Process each tweet in the thread
+        for (const t of thread.content) {
+          const tweet: SendTweetV2Params = { text: t.content };
+          
+          // If there's a base64 image, upload it
+          if (t.imageBase64) {
+            try {
+              // Convert base64 to buffer
+              const imageBuffer = Buffer.from(t.imageBase64.split(',')[1], 'base64');
+              const mediaId = await client.v1.uploadMedia(imageBuffer, { mimeType: 'image/png' });
+              tweet.media = { media_ids: [mediaId] };
+            } catch (mediaError) {
+              console.error('Error uploading image:', mediaError);
+            }
+          }
+          
+          tweetsPayload.push(tweet);
+        }
 
         // Post the tweet thread using the Twitter API client
         const response = await client.v2.tweetThread(tweetsPayload);
