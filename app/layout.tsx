@@ -1,43 +1,65 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { authOptions } from "@/app/api/auth/authOptions";
 import AuthProvider from "@/components/session-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
+import { Inter } from "next/font/google";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Protected App",
-  description: "This app requires authentication",
+  title: {
+    default: "Sparklog - Twitter Thread Management Platform",
+    template: "%s | Sparklog"
+  },
+  description: "Create, manage and schedule your Twitter threads with ease. Sparklog helps content creators optimize their social media presence.",
+  keywords: ["Twitter", "thread", "social media", "content management", "scheduling", "automation"],
+  authors: [{ name: "Sparklog Team" }],
+  creator: "Sparklog",
+  publisher: "Sparklog",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://sparklog.com",
+    title: "Sparklog - Twitter Thread Management Platform",
+    description: "Create, manage and schedule your Twitter threads with ease",
+    siteName: "Sparklog",
+    images: [{
+      url: "/og-image.png",
+      width: 1200,
+      height: 630,
+      alt: "Sparklog Preview"
+    }]
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sparklog - Twitter Thread Management Platform",
+    description: "Create, manage and schedule your Twitter threads with ease",
+    creator: "@sparklog",
+    images: ["/og-image.png"]
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png"
+  }
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
-  // Get the user session
-  const session = await getServerSession(authOptions);
-
-  // Redirect to login if no session
-  if (!session) {
-    redirect("/api/auth/signin");
-  }
-
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider>
-          <AuthProvider session={session}>{children}</AuthProvider>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>

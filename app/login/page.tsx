@@ -7,19 +7,21 @@ import { Loader2, Twitter } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Image from "next/image";
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 export default function LoginPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (session) {
-      router.push("/home");
+      router.push("/");
     }
   }, [session, router]);
 
   if (status === "loading") {
     return (
-      <div className="flex h-screen items-center justify-center bg-gradient-to-b from-white to-gray-50">
+      <div className="min-h-screen flex flex-col bg-background">
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin text-primary mx-auto" />
           <p className="text-muted-foreground">Loading your profile...</p>
@@ -29,8 +31,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex h-screen items-center justify-center bg-gradient-to-b from-white to-gray-50">
-      <Card className="w-[400px] shadow-lg transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 group">
+    <div className="min-h-screen flex flex-col bg-background">
+      <Header />
+      <main className="flex-grow flex items-center justify-center py-16 px-4">
+      <Card className="w-[400px] shadow-lg transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 group backdrop-blur-sm bg-background/95">
         <CardHeader className="space-y-6">
           <div className="flex justify-center">
             <div className="p-3 rounded-full bg-primary/10">
@@ -91,6 +95,8 @@ export default function LoginPage() {
           )}
         </CardContent>
       </Card>
+      </main>
+      <Footer />
     </div>
   );
 }

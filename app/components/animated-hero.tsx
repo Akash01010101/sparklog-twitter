@@ -4,7 +4,8 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Link from 'next/link';
 import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 export function AnimatedHero() {
   const { theme, setTheme } = useTheme();
@@ -43,19 +44,30 @@ export function AnimatedHero() {
       variants={containerVariants}
       className="relative py-20 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-background to-muted/50 overflow-hidden"
     >
-      <motion.button
-        onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-        className="absolute top-4 right-4 p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        variants={itemVariants}
-      >
-        {theme === 'dark' ? (
-          <Sun className="h-6 w-6 text-primary" />
-        ) : (
-          <Moon className="h-6 w-6 text-primary" />
-        )}
-      </motion.button>
+      <div className="absolute top-4 right-4 flex gap-2">
+        <motion.button
+          onClick={() => signOut()}
+          className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          variants={itemVariants}
+        >
+          <LogOut className="h-6 w-6 text-primary" />
+        </motion.button>
+        <motion.button
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+          className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          variants={itemVariants}
+        >
+          {theme === 'dark' ? (
+            <Sun className="h-6 w-6 text-primary" />
+          ) : (
+            <Moon className="h-6 w-6 text-primary" />
+          )}
+        </motion.button>
+      </div>
 
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center space-y-8">
