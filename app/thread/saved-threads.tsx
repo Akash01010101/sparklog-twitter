@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { Edit2, MessageCircle, Loader2, Clock } from "lucide-react";
+import { Edit2, MessageCircle, Loader2, Clock, Trash2 } from "lucide-react";
 import { ScheduleModal } from "./schedule-modal";
 
 interface Thread {
@@ -16,7 +16,12 @@ interface Thread {
     imageFile?: File;
   }>;
   created_at: string;
-  scheduled_time?: string; // This field is properly used
+  scheduled_time?: string;
+}
+
+interface DeleteResponse {
+  success: boolean;
+  error?: string;
 }
 
 export function SavedThreads() {
@@ -69,6 +74,31 @@ export function SavedThreads() {
     fetchThreads();
   }, [session]);
 
+  const handleDelete = async (threadId: string) => {
+    if (!session?.user?.email) return;
+
+    if (!confirm("Are you sure you want to delete this thread?")) return;
+
+    try {
+      const response = await fetch(`/api/thread/save?threadId=${threadId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) throw new Error("Failed to delete thread");
+
+      const data: DeleteResponse = await response.json();
+      if (data.success) {
+        setThreads(threads.filter(thread => thread.id !== threadId));
+      } else {
+        throw new Error(data.error || "Failed to delete thread");
+      }
+    } catch (error) {
+      console.error("Error deleting thread:", error);
+      alert("Failed to delete thread. Please try again.");
+    }
+  };
+
   const handleSchedule = async (date: Date) => {
     if (!session?.user?.email || !selectedThreadId) {
       console.error("Error: Missing user ID or thread ID");
@@ -102,10 +132,20 @@ export function SavedThreads() {
       const { thread } = await response.json();
       console.log("Scheduled thread response:", thread);
   
-      // Update state with scheduled time
+      // Update state with scheduled time and format it to IST
       setThreads((prevThreads) =>
         prevThreads.map((t) =>
-          t.id === selectedThreadId ? { ...t, scheduled_time: thread.scheduled_time } : t
+          t.id === selectedThreadId
+            ? {
+                ...t,
+                scheduled_time: new Date(thread.scheduled_time + "Z").toLocaleString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  hour12: true,
+                }),
+              }
+            : t
         )
       );
   
@@ -166,7 +206,7 @@ export function SavedThreads() {
       <motion.h2
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-2xl font-bold mb-6 text-gray-900"
+        className="text-2xl font-bold mb-6 text-foreground"
       >
         Saved Threads
       </motion.h2>
@@ -179,15 +219,15 @@ export function SavedThreads() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: index * 0.1 }}
             >
-              <Card className="p-6 hover:shadow-lg transition-all duration-300 bg-white/50 backdrop-blur-sm border-gray-100 hover:border-primary/20">
+              <Card className="p-6 hover:shadow-lg transition-all duration-300 bg-background/50 backdrop-blur-sm border-border hover:border-primary/20">
                 <div className="flex justify-between items-start">
                   <div className="space-y-2">
-                    <h3 className="font-semibold text-lg text-gray-900 hover:text-primary transition-colors">
+                    <h3 className="font-semibold text-lg text-foreground hover:text-primary transition-colors">
                       {thread.title}
                     </h3>
                     <div className="flex items-center space-x-4">
-                      <p className="text-sm text-gray-500">{thread.created_at}</p>
-                      <div className="flex items-center text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">{thread.created_at}</p>
+                      <div className="flex items-center text-sm text-muted-foreground">
                         <MessageCircle className="h-4 w-4 mr-1" />
                         {thread.content.length} tweets
                       </div>
@@ -220,6 +260,15 @@ export function SavedThreads() {
                     >
                       <Clock className="h-4 w-4 mr-2" />
                       Schedule
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete(thread.id)}
+                      className="hover:bg-red-100 text-gray-600 hover:text-red-600 transition-colors"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
                     </Button>
                   </div>
                 </div>

@@ -29,6 +29,35 @@ const supabase = createClient(
   process.env.PUBLIC_SUPABASE_ANON_KEY
 );
 
+export async function DELETE(request: Request) {
+  try {
+    const url = new URL(request.url);
+    const threadId = url.searchParams.get('threadId');
+
+    if (!threadId) {
+      return NextResponse.json({ error: "Thread ID is required" }, { status: 400 });
+    }
+
+    const { error } = await supabase
+      .from("threads")
+      .delete()
+      .eq("id", threadId);
+
+    if (error) {
+      console.error("Error deleting thread:", error);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Error in DELETE request:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json() as ThreadData;
