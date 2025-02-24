@@ -47,11 +47,11 @@ export default function HomePage() {
                 whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
               >
                 <Link href={card.href}>
-                  <Card className="h-full transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 cursor-pointer">
+                  <Card className="h-full transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 cursor-pointer group">
                     <CardHeader>
                       <div className="flex items-center gap-4">
                         <motion.div 
-                          className="p-3 rounded-lg bg-primary/10"
+                          className="p-3 rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/20"
                           whileHover={{ rotate: 5 }}
                         >
                           <card.icon className="h-6 w-6 text-primary" />
@@ -73,10 +73,10 @@ export default function HomePage() {
                             transition={{ delay: (index * 0.1) + (idx * 0.05) }}
                           >
                             <motion.div 
-                              className="h-1.5 w-1.5 rounded-full bg-primary"
+                              className="h-1.5 w-1.5 rounded-full bg-primary transition-all duration-300 group-hover:bg-primary/80"
                               whileHover={{ scale: 1.5 }}
                             />
-                            <span className="text-muted-foreground hover:text-primary transition-colors">{feature}</span>
+                            <span className="text-muted-foreground group-hover:text-primary transition-all duration-300">{feature}</span>
                           </motion.li>
                         ))}
                       </ul>
@@ -126,7 +126,7 @@ export default function HomePage() {
             <Button 
               asChild 
               size="lg"
-              className="hover:scale-105 transition-transform duration-200"
+              className="hover:scale-105 transition-all duration-300 hover:shadow-lg hover:bg-primary/90"
             >
               <Link href="/thread">
                 Get Started

@@ -90,14 +90,14 @@ export default function PricingPage() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection delay={0.4} className="py-20 px-4 md:px-6 lg:px-8 bg-gray-50">
+      <AnimatedSection delay={0.4} className="py-20 px-4 md:px-6 lg:px-8 bg-muted dark:bg-muted/10">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-12">Frequently Asked Questions</h2>
+          <h2 className="text-3xl font-bold mb-12 text-foreground dark:text-foreground">Frequently Asked Questions</h2>
           <AnimatedList className="grid gap-6 text-left" staggerDelay={0.1}>
             {faqs.map((faq, index) => (
               <div key={index} className="space-y-2">
-                <h3 className="font-semibold text-lg">{faq.question}</h3>
-                <p className="text-muted-foreground">{faq.answer}</p>
+                <h3 className="font-semibold text-lg text-foreground dark:text-foreground">{faq.question}</h3>
+                <p className="text-muted-foreground dark:text-muted-foreground">{faq.answer}</p>
               </div>
             ))}
           </AnimatedList>

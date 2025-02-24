@@ -30,7 +30,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex h-screen items-center justify-center bg-gradient-to-b from-white to-gray-50">
-      <Card className="w-[400px] shadow-lg transform transition-all hover:scale-105">
+      <Card className="w-[400px] shadow-lg transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 group">
         <CardHeader className="space-y-6">
           <div className="flex justify-center">
             <div className="p-3 rounded-full bg-primary/10">

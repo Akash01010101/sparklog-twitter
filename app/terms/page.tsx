@@ -24,12 +24,12 @@ export default function TermsOfServicePage() {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.2 }}
               >
-                <Card>
+                <Card className="transform transition-all duration-300 hover:shadow-lg hover:bg-accent/5 group">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
                       <motion.div
                         whileHover={{ rotate: 15 }}
-                        className="p-2 rounded-lg bg-primary/10"
+                        className="p-2 rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/20"
                       >
                         <section.icon className="h-5 w-5 text-primary" />
                       </motion.div>
@@ -51,6 +51,7 @@ export default function TermsOfServicePage() {
                                 <ul className="list-disc list-inside space-y-2 mt-2 ml-4 text-muted-foreground">
                                   {clause.subclauses.map((subclause, subIdx) => (
                                     <motion.li
+                              className="transition-all duration-300 group-hover:text-primary/90"
                                       key={subIdx}
                                       initial={{ opacity: 0, x: -10 }}
                                       animate={{ opacity: 1, x: 0 }}

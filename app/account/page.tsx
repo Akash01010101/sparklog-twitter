@@ -81,7 +81,7 @@ export default function AccountPage() {
                                 {setting.description}
                               </p>
                             </div>
-                            <Button variant={"outline"}>
+                            <Button variant={"outline"} className="transform transition-all duration-300 hover:scale-105 hover:shadow-md group-hover:bg-primary/10">
                               {setting.action.label}
                             </Button>
                           </div>

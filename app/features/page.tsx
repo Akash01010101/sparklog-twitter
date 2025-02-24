@@ -80,12 +80,12 @@ export default function FeaturesPage() {
                 whileHover={{ scale: 1.02 }}
                 className="h-full"
               >
-                <Card className="border shadow-sm h-full transition-shadow hover:shadow-lg">
+                <Card className="border shadow-sm h-full transition-all duration-300 hover:shadow-lg hover:bg-accent/5 group">
                   <CardHeader>
                     <div className="flex items-center gap-4">
                       <motion.div
                         whileHover={{ rotate: 15 }}
-                        className="p-3 rounded-lg bg-primary/10"
+                        className="p-3 rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/20"
                       >
                         <feature.icon className="h-6 w-6 text-primary" />
                       </motion.div>
@@ -105,10 +105,10 @@ export default function FeaturesPage() {
                           transition={{ delay: index * 0.1 + idx * 0.1 }}
                           className="flex items-start gap-2"
                         >
-                          <div className="rounded-full bg-primary/10 p-1 mt-1">
-                            <div className="h-1.5 w-1.5 rounded-full bg-primary" />
+                          <div className="rounded-full bg-primary/10 p-1 mt-1 transition-all duration-300 group-hover:bg-primary/20">
+                            <div className="h-1.5 w-1.5 rounded-full bg-primary transition-all duration-300 group-hover:scale-110" />
                           </div>
-                          <span className="text-muted-foreground">{point}</span>
+                          <span className="text-muted-foreground group-hover:text-primary transition-all duration-300">{point}</span>
                         </motion.li>
                       ))}
                     </ul>
