@@ -10,7 +10,8 @@ const publicRoutes = [
   "/help",
   "/legal",
   "/terms",
-  "/api/auth"
+  "/api/auth",
+  "/api/schedule"
 ];
 
 export async function middleware(request: NextRequest) {
