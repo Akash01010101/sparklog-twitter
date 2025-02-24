@@ -152,7 +152,7 @@ export function SavedThreads() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-8 text-center py-12 bg-gray-50/50 rounded-lg border border-dashed border-gray-200"
+        className="mt-8 text-center py-12 bg-muted/50 dark:bg-muted/10 rounded-lg border border-dashed border-border dark:border-border/50"
       >
         <MessageCircle className="h-12 w-12 mx-auto text-gray-400 mb-4" />
         <p className="text-gray-600 font-medium">No saved threads yet</p>

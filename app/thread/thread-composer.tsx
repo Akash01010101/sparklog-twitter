@@ -6,9 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ReplyIcon, Hash, Scissors, HelpCircle, ImageIcon, SaveIcon, Loader2 } from "lucide-react";
+import { ImageIcon, SaveIcon, Loader2 } from "lucide-react";
 import { ThreadPreview } from "./thread-preview";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface Tweet {
   content: string;
@@ -25,7 +25,7 @@ export function ThreadComposer() {
   const [isPosting, setIsPosting] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const [showImagePreview, setShowImagePreview] = useState<boolean>(false);
+
   useEffect(() => {
     const savedThread = localStorage.getItem('draftThread');
     if (savedThread) {
@@ -71,14 +71,12 @@ export function ThreadComposer() {
       setTweets([...tweets, ...newTweets]);
       setContent("");
       setCurrentImageFile(null);
-      setShowImagePreview(false);
     }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setCurrentImageFile(e.target.files[0]);
-      setShowImagePreview(true);
     }
   };
 
@@ -211,76 +209,49 @@ export function ThreadComposer() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
       >
         <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
           <div className="space-y-6">
-            <Input
-              type="text"
-              placeholder="Thread title (required)"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              required
-              className="text-lg font-semibold focus:ring-2 focus:ring-primary"
-            />
-            <div className="flex items-center space-x-4 overflow-x-auto py-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors">
-                <ReplyIcon className="h-4 w-4 mr-2" />
-                Reply to a tweet
-              </Button>
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors">
-                <Hash className="h-4 w-4 mr-2" />
-                Numbering
-              </Button>
-              <label htmlFor="image-upload" className="cursor-pointer">
-                <Button variant="ghost" size="sm" asChild className="hover:bg-primary/10 transition-colors">
-                  <span>
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    Upload Image
-                  </span>
-                </Button>
-              </label>
-              <input id="image-upload" type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors">
-                <Scissors className="h-4 w-4 mr-2" />
-                Split
-              </Button>
-              <Button variant="ghost" size="sm" className="hover:bg-primary/10 transition-colors">
-                <HelpCircle className="h-4 w-4 mr-2" />
-                Tips & tricks
-              </Button>
-            </div>
-          </div>
-          <div className="mt-6">
-            <Textarea
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder="Write your tweet..."
-              className="min-h-[150px] focus:ring-2 focus:ring-primary resize-none"
-            />
-            <AnimatePresence>
-              {currentImageFile && showImagePreview && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="mt-4 p-4 bg-gray-50 rounded-lg"
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <Input
+                type="text"
+                placeholder="Thread Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full mb-4"
+              />
+              <Textarea
+                placeholder="What's happening?"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                className="w-full min-h-[100px] resize-none"
+              />
+            </motion.div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  <p className="text-sm text-gray-600 flex items-center">
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    {currentImageFile.name}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="flex justify-between items-center mt-4">
-              <div className="text-sm text-gray-500">
-                {content.length} / {MAX_TWEET_LENGTH} characters
+                  <ImageIcon className="h-5 w-5 text-gray-500" />
+                </label>
               </div>
-              <Button 
+              <Button
                 onClick={handleAddTweet}
-                className="bg-primary hover:bg-primary/90 text-white transition-colors"
                 disabled={!content.trim() && !currentImageFile}
+                className="ml-auto"
               >
                 Add Tweet
               </Button>
@@ -292,47 +263,41 @@ export function ThreadComposer() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
+        transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 100 }}
       >
-        <Card className="p-6 shadow-lg hover:shadow-xl transition-shadow duration-300">
-          <div className="space-y-6">
-            <ThreadPreview tweets={tweets} />
-            <div className="flex space-x-4">
-              <Button 
-                className="flex-1 bg-primary hover:bg-primary/90 text-white transition-colors"
-                onClick={handleSubmit} 
-                disabled={tweets.length === 0 || isPosting}
-              >
-                {isPosting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Posting...
-                  </>
-                ) : (
-                  "Share on Twitter now"
-                )}
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={handleSave} 
-                disabled={tweets.length === 0 || isSaving}
-                className="hover:bg-primary/10 transition-colors"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <SaveIcon className="h-4 w-4 mr-2" />
-                    Save Draft
-                  </>
-                )}
-              </Button>
-            </div>
-          </div>
-        </Card>
+        <ThreadPreview tweets={tweets} />
+        <div className="mt-6 flex justify-end space-x-4">
+          <Button
+            variant="outline"
+            onClick={handleSave}
+            disabled={isSaving || tweets.length === 0}
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <SaveIcon className="mr-2 h-4 w-4" />
+                Save Draft
+              </>
+            )}
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            disabled={isPosting || tweets.length === 0}
+          >
+            {isPosting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Posting...
+              </>
+            ) : (
+              "Post Thread"
+            )}
+          </Button>
+        </div>
       </motion.div>
     </div>
   );

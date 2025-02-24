@@ -20,11 +20,12 @@ import {
   Shield,
   Key,
 } from "lucide-react";
+import { AnimatedSection, AnimatedList } from "../components/animated-section";
 
 export default function AccountPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+      <AnimatedSection className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto max-w-6xl">
           <div className="flex items-center gap-4 mb-8">
             <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center">
@@ -39,28 +40,30 @@ export default function AccountPage() {
           </div>
 
           <Tabs defaultValue="profile" className="space-y-8">
-            <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              <TabsTrigger value="profile" className="flex items-center gap-2">
-                <User className="h-4 w-4" /> Profile
-              </TabsTrigger>
-              <TabsTrigger value="preferences" className="flex items-center gap-2">
-                <Settings className="h-4 w-4" /> Preferences
-              </TabsTrigger>
-              <TabsTrigger value="billing" className="flex items-center gap-2">
-                <CreditCard className="h-4 w-4" /> Billing
-              </TabsTrigger>
-              <TabsTrigger value="notifications" className="flex items-center gap-2">
-                <Bell className="h-4 w-4" /> Notifications
-              </TabsTrigger>
-              <TabsTrigger value="privacy" className="flex items-center gap-2">
-                <Shield className="h-4 w-4" /> Privacy
-              </TabsTrigger>
-              <TabsTrigger value="security" className="flex items-center gap-2">
-                <Key className="h-4 w-4" /> Security
-              </TabsTrigger>
-            </TabsList>
+            <AnimatedSection delay={0.2}>
+              <TabsList className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <TabsTrigger value="profile" className="flex items-center gap-2">
+                  <User className="h-4 w-4" /> Profile
+                </TabsTrigger>
+                <TabsTrigger value="preferences" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" /> Preferences
+                </TabsTrigger>
+                <TabsTrigger value="billing" className="flex items-center gap-2">
+                  <CreditCard className="h-4 w-4" /> Billing
+                </TabsTrigger>
+                <TabsTrigger value="notifications" className="flex items-center gap-2">
+                  <Bell className="h-4 w-4" /> Notifications
+                </TabsTrigger>
+                <TabsTrigger value="privacy" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" /> Privacy
+                </TabsTrigger>
+                <TabsTrigger value="security" className="flex items-center gap-2">
+                  <Key className="h-4 w-4" /> Security
+                </TabsTrigger>
+              </TabsList>
+            </AnimatedSection>
 
-            <div className="grid gap-8">
+            <AnimatedList className="grid gap-8" staggerDelay={0.1}>
               {sections.map((section, index) => (
                 <TabsContent key={index} value={section.id}>
                   <Card>
@@ -78,7 +81,7 @@ export default function AccountPage() {
                                 {setting.description}
                               </p>
                             </div>
-                            <Button variant={ "outline"}>
+                            <Button variant={"outline"}>
                               {setting.action.label}
                             </Button>
                           </div>
@@ -91,10 +94,10 @@ export default function AccountPage() {
                   </Card>
                 </TabsContent>
               ))}
-            </div>
+            </AnimatedList>
           </Tabs>
         </div>
-      </section>
+      </AnimatedSection>
     </div>
   );
 }

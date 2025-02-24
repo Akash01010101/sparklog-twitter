@@ -1,10 +1,14 @@
+'use client';
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Scale, FileText, AlertCircle, UserCheck } from "lucide-react";
+import { AnimatedSection, AnimatedList } from "../components/animated-section";
+import { motion } from "framer-motion";
 
 export default function TermsOfServicePage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <section className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+      <AnimatedSection className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto max-w-4xl">
           <div className="text-center space-y-4 mb-12">
             <h1 className="text-4xl font-bold tracking-tight">Terms of Service</h1>
@@ -13,40 +17,62 @@ export default function TermsOfServicePage() {
             </p>
           </div>
 
-          <div className="grid gap-8">
+          <AnimatedList className="grid gap-8" staggerDelay={0.1}>
             {sections.map((section, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <section.icon className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
-                      <p className="text-muted-foreground mb-4">{section.description}</p>
-                      <div className="space-y-6">
-                        {section.clauses.map((clause, idx) => (
-                          <div key={idx} className="space-y-2">
-                            <h3 className="font-medium text-lg">{clause.title}</h3>
-                            <p className="text-muted-foreground">{clause.content}</p>
-                            {clause.subclauses && (
-                              <ul className="list-disc list-inside space-y-2 mt-2 ml-4 text-muted-foreground">
-                                {clause.subclauses.map((subclause, subIdx) => (
-                                  <li key={subIdx}>{subclause}</li>
-                                ))}
-                              </ul>
-                            )}
-                          </div>
-                        ))}
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Card>
+                  <CardContent className="pt-6">
+                    <div className="flex items-start gap-4">
+                      <motion.div
+                        whileHover={{ rotate: 15 }}
+                        className="p-2 rounded-lg bg-primary/10"
+                      >
+                        <section.icon className="h-5 w-5 text-primary" />
+                      </motion.div>
+                      <div>
+                        <h2 className="text-2xl font-semibold mb-2">{section.title}</h2>
+                        <p className="text-muted-foreground mb-4">{section.description}</p>
+                        <div className="space-y-6">
+                          {section.clauses.map((clause, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, y: 10 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: index * 0.1 + idx * 0.1 }}
+                              className="space-y-2"
+                            >
+                              <h3 className="font-medium text-lg">{clause.title}</h3>
+                              <p className="text-muted-foreground">{clause.content}</p>
+                              {clause.subclauses && (
+                                <ul className="list-disc list-inside space-y-2 mt-2 ml-4 text-muted-foreground">
+                                  {clause.subclauses.map((subclause, subIdx) => (
+                                    <motion.li
+                                      key={subIdx}
+                                      initial={{ opacity: 0, x: -10 }}
+                                      animate={{ opacity: 1, x: 0 }}
+                                      transition={{ delay: index * 0.1 + idx * 0.1 + subIdx * 0.05 }}
+                                    >
+                                      {subclause}
+                                    </motion.li>
+                                  ))}
+                                </ul>
+                              )}
+                            </motion.div>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
-          </div>
+          </AnimatedList>
 
-          <div className="mt-12 text-center text-sm text-muted-foreground">
+          <AnimatedSection delay={0.4} className="mt-12 text-center text-sm text-muted-foreground">
             <p>
               By using our services, you agree to these terms. For any questions, please{" "}
               <a href="/contact" className="text-primary hover:underline">
@@ -54,9 +80,9 @@ export default function TermsOfServicePage() {
               </a>
               .
             </p>
-          </div>
+          </AnimatedSection>
         </div>
-      </section>
+      </AnimatedSection>
     </div>
   );
 }

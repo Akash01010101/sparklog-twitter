@@ -1,3 +1,4 @@
+'use client'
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,12 +9,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Check, X } from "lucide-react";
+import { AnimatedSection, AnimatedList } from "../components/animated-section";
+import { motion } from "framer-motion";
 
 export default function PricingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
+      <AnimatedSection className="py-16 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
@@ -24,76 +26,83 @@ export default function PricingPage() {
             </p>
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* Pricing Cards */}
-      <section className="py-20 px-4 md:px-6 lg:px-8">
+      <AnimatedSection delay={0.2} className="py-20 px-4 md:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`flex flex-col ${
-                  plan.popular ? 'border-primary shadow-lg scale-105' : 'border shadow'
-                }`}
+              <motion.div
+                key={index}
+                whileHover={{ scale: plan.popular ? 1.02 : 1.05 }}
+                transition={{ duration: 0.2 }}
               >
-                <CardHeader>
-                  {plan.popular && (
-                    <div className="text-sm font-medium text-primary mb-2">
-                      Most Popular
+                <Card 
+                  className={`flex flex-col ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border shadow'}`}
+                >
+                  <CardHeader>
+                    {plan.popular && (
+                      <div className="text-sm font-medium text-primary mb-2">
+                        Most Popular
+                      </div>
+                    )}
+                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                    <CardDescription>{plan.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <div className="mb-6">
+                      <span className="text-4xl font-bold">${plan.price}</span>
+                      <span className="text-muted-foreground">/month</span>
                     </div>
-                  )}
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="flex-grow">
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">${plan.price}</span>
-                    <span className="text-muted-foreground">/month</span>
-                  </div>
-                  <ul className="space-y-3">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
-                        {feature.included ? (
-                          <Check className="h-5 w-5 text-primary" />
-                        ) : (
-                          <X className="h-5 w-5 text-muted-foreground" />
-                        )}
-                        <span className={!feature.included ? "text-muted-foreground" : ""}>
-                          {feature.text}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button 
-                    className="w-full" 
-                    variant={plan.popular ? "default" : "outline"}
-                  >
-                    Get Started
-                  </Button>
-                </CardFooter>
-              </Card>
+                    <ul className="space-y-3">
+                      {plan.features.map((feature, idx) => (
+                        <motion.li
+                          key={idx}
+                          initial={{ opacity: 0, x: -10 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 + idx * 0.1 }}
+                          className="flex items-center gap-2"
+                        >
+                          {feature.included ? (
+                            <Check className="h-5 w-5 text-primary" />
+                          ) : (
+                            <X className="h-5 w-5 text-muted-foreground" />
+                          )}
+                          <span className={!feature.included ? "text-muted-foreground" : ""}>
+                            {feature.text}
+                          </span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button 
+                      className="w-full" 
+                      variant={plan.popular ? "default" : "outline"}
+                    >
+                      Get Started
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
-      </section>
+      </AnimatedSection>
 
-      {/* FAQ Section */}
-      <section className="py-20 px-4 md:px-6 lg:px-8 bg-gray-50">
+      <AnimatedSection delay={0.4} className="py-20 px-4 md:px-6 lg:px-8 bg-gray-50">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold mb-12">Frequently Asked Questions</h2>
-          <div className="grid gap-6 text-left">
+          <AnimatedList className="grid gap-6 text-left" staggerDelay={0.1}>
             {faqs.map((faq, index) => (
               <div key={index} className="space-y-2">
                 <h3 className="font-semibold text-lg">{faq.question}</h3>
                 <p className="text-muted-foreground">{faq.answer}</p>
               </div>
             ))}
-          </div>
+          </AnimatedList>
         </div>
-      </section>
+      </AnimatedSection>
     </div>
   );
 }

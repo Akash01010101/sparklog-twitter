@@ -90,22 +90,57 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-4 md:px-6 lg:px-8 bg-gray-50">
-        <div className="container mx-auto max-w-6xl text-center">
-          <h2 className="text-3xl font-bold mb-4">
+      <motion.section 
+        className="py-20 px-4 md:px-6 lg:px-8 bg-muted/50 dark:bg-muted/10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.div 
+          className="container mx-auto max-w-6xl text-center"
+          initial={{ y: 20 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <motion.h2 
+            className="text-3xl font-bold mb-4 text-foreground"
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+          >
             Ready to Create Your First Thread?
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+          >
             Join thousands of content creators who use our platform to share their stories.
-          </p>
-          <Button asChild size="lg">
-            <Link href="/thread">
-              Get Started
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-      </section>
+          </motion.p>
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.8 }}
+          >
+            <Button 
+              asChild 
+              size="lg"
+              className="hover:scale-105 transition-transform duration-200"
+            >
+              <Link href="/thread">
+                Get Started
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </motion.div>
+              </Link>
+            </Button>
+          </motion.div>
+        </motion.div>
+      </motion.section>
     </div>
   );
 }
