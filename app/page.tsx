@@ -19,12 +19,10 @@ import {
   Scale,
   ArrowRight,
   Check,
-  X,
 } from "lucide-react";
 
 import { AnimatedHero } from './components/animated-hero';
 import { ThreadPreview } from './components/thread-preview';
-import { SocialIntegrations } from './components/social-integrations';
 import { CustomerReviews } from './components/customer-reviews';
 import { FAQSection } from './components/faq-section';
 import { motion } from 'framer-motion';
@@ -154,7 +152,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <SocialIntegrations />
       <CustomerReviews />
 
       {/* Pricing Section */}
@@ -171,114 +168,60 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
+            <h2 className="text-3xl font-bold mb-4">Free Forever</h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose the perfect plan for your content creation needs
+              All features included, no credit card required
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                name: "Free",
-                description: "Perfect for getting started",
-                price: "0",
-                popular: false,
-                features: [
-                  { text: "1 Social Media Account", included: true },
-                  { text: "Basic Content Editor", included: true },
-                  { text: "5 Posts per Month", included: true },
-                  { text: "Basic Analytics", included: true },
-                  { text: "Auto-split Content", included: false },
-                  { text: "Team Collaboration", included: false },
-                  { text: "Priority Support", included: false },
-                ],
-              },
-              {
-                name: "Pro",
-                description: "Best for content creators",
-                price: "29",
-                popular: true,
-                features: [
-                  { text: "Unlimited Social Accounts", included: true },
-                  { text: "Advanced Content Editor", included: true },
-                  { text: "Unlimited Posts", included: true },
-                  { text: "Advanced Analytics", included: true },
-                  { text: "Auto-split Content", included: true },
-                  { text: "Team Collaboration", included: true },
-                  { text: "Priority Support", included: false },
-                ],
-              },
-              {
-                name: "Enterprise",
-                description: "For large teams and businesses",
-                price: "99",
-                popular: false,
-                features: [
-                  { text: "Unlimited Social Accounts", included: true },
-                  { text: "Advanced Content Editor", included: true },
-                  { text: "Unlimited Posts", included: true },
-                  { text: "Advanced Analytics", included: true },
-                  { text: "Auto-split Content", included: true },
-                  { text: "Team Collaboration", included: true },
-                  { text: "Priority Support", included: true },
-                ],
-              },
-            ].map((plan, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: plan.popular ? 1.02 : 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Card 
-                  className={`flex flex-col p-6 ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border shadow'}`}
-                >
-                  <CardHeader className="pb-8">
-                    {plan.popular && (
-                      <div className="text-base font-medium text-primary mb-4">
-                        Most Popular
-                      </div>
-                    )}
-                    <CardTitle className="text-3xl mb-2">{plan.name}</CardTitle>
-                    <CardDescription className="text-lg">{plan.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <div className="mb-8">
-                      <span className="text-5xl font-bold">${plan.price}</span>
-                      <span className="text-xl text-muted-foreground">/month</span>
-                    </div>
-                    <ul className="space-y-4">
-                      {plan.features.map((feature, idx) => (
-                        <motion.li
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + idx * 0.1 }}
-                          className="flex items-center gap-2"
-                        >
-                          {feature.included ? (
-                            <Check className="h-5 w-5 text-primary" />
-                          ) : (
-                            <X className="h-5 w-5 text-muted-foreground" />
-                          )}
-                          <span className={!feature.included ? "text-muted-foreground" : ""}>
-                            {feature.text}
-                          </span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button 
-                      className="w-full" 
-                      variant={plan.popular ? "default" : "outline"}
-                    >
-                      Get Started
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="flex justify-center">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-lg"
+            >
+              <Card className="border-primary shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Everything You Need</CardTitle>
+                  <CardDescription>Start creating amazing content today</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold">$0</span>
+                    <span className="text-muted-foreground">/forever</span>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Unlimited Social Accounts",
+                      "Advanced Content Editor",
+                      "Unlimited Posts",
+                      "Advanced Analytics",
+                      "Auto-split Content",
+                      "Team Collaboration",
+                      "Community Support"
+                    ].map((feature, idx) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Check className="h-5 w-5 text-primary" />
+                        <span>{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90"
+                  >
+                    Get Started Now
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </motion.section>

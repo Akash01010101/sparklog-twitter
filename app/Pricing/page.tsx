@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 import { AnimatedSection, AnimatedList } from "../components/animated-section";
 import { motion } from "framer-motion";
 
@@ -19,10 +19,10 @@ export default function PricingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Simple, Transparent Pricing
+              Free Forever
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose the perfect plan for your content creation needs
+              All features included, no credit card required
             </p>
           </div>
         </div>
@@ -30,62 +30,54 @@ export default function PricingPage() {
 
       <AnimatedSection delay={0.2} className="py-20 px-4 md:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <motion.div
-                key={index}
-                whileHover={{ scale: plan.popular ? 1.02 : 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Card 
-                  className={`flex flex-col ${plan.popular ? 'border-primary shadow-lg scale-105' : 'border shadow'}`}
-                >
-                  <CardHeader>
-                    {plan.popular && (
-                      <div className="text-sm font-medium text-primary mb-2">
-                        Most Popular
-                      </div>
-                    )}
-                    <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                    <CardDescription>{plan.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent className="flex-grow">
-                    <div className="mb-6">
-                      <span className="text-4xl font-bold">${plan.price}</span>
-                      <span className="text-muted-foreground">/month</span>
-                    </div>
-                    <ul className="space-y-3">
-                      {plan.features.map((feature, idx) => (
-                        <motion.li
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 + idx * 0.1 }}
-                          className="flex items-center gap-2"
-                        >
-                          {feature.included ? (
-                            <Check className="h-5 w-5 text-primary" />
-                          ) : (
-                            <X className="h-5 w-5 text-muted-foreground" />
-                          )}
-                          <span className={!feature.included ? "text-muted-foreground" : ""}>
-                            {feature.text}
-                          </span>
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                  <CardFooter>
-                    <Button 
-                      className="w-full" 
-                      variant={plan.popular ? "default" : "outline"}
-                    >
-                      Get Started
-                    </Button>
-                  </CardFooter>
-                </Card>
-              </motion.div>
-            ))}
+          <div className="flex justify-center">
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-lg"
+            >
+              <Card className="border-primary shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Everything You Need</CardTitle>
+                  <CardDescription>Start creating amazing content today</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold">$0</span>
+                    <span className="text-muted-foreground">/forever</span>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Unlimited Social Accounts",
+                      "Advanced Content Editor",
+                      "Unlimited Posts",
+                      "Advanced Analytics",
+                      "Auto-split Content",
+                      "Team Collaboration",
+                      "Community Support"
+                    ].map((feature, idx) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Check className="h-5 w-5 text-primary" />
+                        <span>{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button 
+                    className="w-full bg-primary hover:bg-primary/90"
+                  >
+                    Get Started Now
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
           </div>
         </div>
       </AnimatedSection>
@@ -94,7 +86,24 @@ export default function PricingPage() {
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold mb-12 text-foreground dark:text-foreground">Frequently Asked Questions</h2>
           <AnimatedList className="grid gap-6 text-left" staggerDelay={0.1}>
-            {faqs.map((faq, index) => (
+            {[
+              {
+                question: "Is it really free forever?",
+                answer: "Yes! Sparklog is completely free to use with all features included. No hidden fees or credit card required."
+              },
+              {
+                question: "Are there any usage limits?",
+                answer: "No, you can use all features without any restrictions. Create as many threads as you want!"
+              },
+              {
+                question: "Do you offer support?",
+                answer: "Yes, we provide community support to all users through our help center and community forums."
+              },
+              {
+                question: "How do you sustain a free service?",
+                answer: "We believe in building a great product that's accessible to everyone. We're supported by our amazing community and optional donations."
+              }
+            ].map((faq, index) => (
               <div key={index} className="space-y-2">
                 <h3 className="font-semibold text-lg text-foreground dark:text-foreground">{faq.question}</h3>
                 <p className="text-muted-foreground dark:text-muted-foreground">{faq.answer}</p>
@@ -106,70 +115,3 @@ export default function PricingPage() {
     </div>
   );
 }
-
-const plans = [
-  {
-    name: "Free",
-    description: "Perfect for getting started",
-    price: "0",
-    popular: false,
-    features: [
-      { text: "1 Social Media Account", included: true },
-      { text: "Basic Content Editor", included: true },
-      { text: "5 Posts per Month", included: true },
-      { text: "Basic Analytics", included: true },
-      { text: "Auto-split Content", included: false },
-      { text: "Team Collaboration", included: false },
-      { text: "Priority Support", included: false },
-    ],
-  },
-  {
-    name: "Pro",
-    description: "Best for content creators",
-    price: "29",
-    popular: true,
-    features: [
-      { text: "Unlimited Social Accounts", included: true },
-      { text: "Advanced Content Editor", included: true },
-      { text: "Unlimited Posts", included: true },
-      { text: "Advanced Analytics", included: true },
-      { text: "Auto-split Content", included: true },
-      { text: "Team Collaboration", included: true },
-      { text: "Priority Support", included: false },
-    ],
-  },
-  {
-    name: "Enterprise",
-    description: "For large teams and businesses",
-    price: "99",
-    popular: false,
-    features: [
-      { text: "Unlimited Social Accounts", included: true },
-      { text: "Advanced Content Editor", included: true },
-      { text: "Unlimited Posts", included: true },
-      { text: "Advanced Analytics", included: true },
-      { text: "Auto-split Content", included: true },
-      { text: "Team Collaboration", included: true },
-      { text: "Priority Support", included: true },
-    ],
-  },
-];
-
-const faqs = [
-  {
-    question: "Can I switch plans at any time?",
-    answer: "Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.",
-  },
-  {
-    question: "Is there a long-term contract?",
-    answer: "No, all our plans are month-to-month with no long-term commitment required.",
-  },
-  {
-    question: "What payment methods do you accept?",
-    answer: "We accept all major credit cards, PayPal, and bank transfers for enterprise customers.",
-  },
-  {
-    question: "Do you offer refunds?",
-    answer: "Yes, we offer a 30-day money-back guarantee if you're not satisfied with our service.",
-  },
-];
