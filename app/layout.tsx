@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION,
+    google: "P8IWXjZ_bvh4kVseV74s1XU_ADu4d7EN5162uEMxjOk",
     yandex: process.env.NEXT_PUBLIC_YANDEX_VERIFICATION,
   },
   alternates: {
