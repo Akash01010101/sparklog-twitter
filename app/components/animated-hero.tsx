@@ -7,101 +7,117 @@ import { useTheme } from 'next-themes';
 import { Moon, Sun, LogOut } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
+interface AnimatedTextProps {
+  text: string;
+  startIndex?: number;
+  className?: string;
+}
+
 export function AnimatedHero() {
   const { theme, setTheme } = useTheme();
   const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
+    triggerOnce: true, // Animation runs once when section is in view
+    threshold: 0.1,    // Trigger when 10% of the section is visible
   });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
+  // Define animation variants for each word
+  const wordVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
       opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
       y: 0,
-      opacity: 1,
       transition: {
-        duration: 0.6,
+        delay: i * 0.1, // 100ms delay per word
+        duration: 0.4,  // Duration of each word's animation
         ease: 'easeOut',
       },
-    },
+    }),
   };
 
+  // Component to animate text by words with a starting index
+  const AnimatedText: React.FC<AnimatedTextProps> = ({
+    text,
+    startIndex = 0,
+    className = '',
+  }) => {
+    const words = text.trim().split(/\s+/); // Split text into words
+    return (
+      <>
+        {words.map((word, index) => (
+          <motion.span
+            key={index}
+            custom={startIndex + index} // Global index for delay
+            variants={wordVariants}
+            initial="hidden"
+            animate={inView ? 'visible' : 'hidden'}
+            className={className}
+          >
+            {word}{' '} {/* Add space after each word */}
+          </motion.span>
+        ))}
+      </>
+    );
+  };
+
+  // Define text parts
+  const headingPart1 = "Create Engaging ";
+  const headingPart2 = "Twitter Threads";
+  const subheading =
+    "Design, write, and schedule your Twitter threads with our powerful thread creator";
+
+  // Calculate the number of words in each part for startIndex
+  const headingPart1Words = headingPart1.trim().split(/\s+/).length;
+  const headingPart2Words = headingPart2.trim().split(/\s+/).length;
+
   return (
-    <motion.section
+    <section
       ref={ref}
-      initial="hidden"
-      animate={inView ? 'visible' : 'hidden'}
-      variants={containerVariants}
       className="relative py-20 px-4 md:px-6 lg:px-8 bg-gradient-to-b from-background to-muted/50 overflow-hidden"
     >
+      {/* Theme toggle and sign-out buttons */}
       <div className="absolute top-4 right-4 flex gap-2">
-        <motion.button
+        <button
           onClick={() => signOut()}
           className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          variants={itemVariants}
         >
           <LogOut className="h-6 w-6 text-primary" />
-        </motion.button>
-        <motion.button
+        </button>
+        <button
           onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          variants={itemVariants}
         >
           {theme === 'dark' ? (
             <Sun className="h-6 w-6 text-primary" />
           ) : (
             <Moon className="h-6 w-6 text-primary" />
           )}
-        </motion.button>
+        </button>
       </div>
 
+      {/* Main content */}
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="text-center space-y-8">
-          <motion.h1
-            variants={itemVariants}
-            className="text-4xl md:text-6xl font-bold tracking-tight"
-          >
-            Create Engaging{' '}
+          {/* Heading with animated words */}
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight">
+            <AnimatedText text={headingPart1} startIndex={0} />
             <span className="text-primary relative inline-block">
-              Twitter Threads
-              <motion.div
-                className="absolute -z-10 inset-0 bg-primary/10 rounded-lg -rotate-2"
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.5, duration: 0.4 }}
-              />
+              <AnimatedText text={headingPart2} startIndex={headingPart1Words} />
+              <div className="absolute -z-10 inset-0 bg-primary/10 rounded-lg -rotate-2" />
             </span>
-          </motion.h1>
-          <motion.p
-            variants={itemVariants}
-            className="text-xl text-muted-foreground max-w-2xl mx-auto"
-          >
-            Design, write, and schedule your Twitter threads with our powerful thread creator
-          </motion.p>
-          <motion.div
-            variants={itemVariants}
-            className="flex justify-center gap-4"
-          >
+          </h1>
+
+          {/* Subheading with animated words */}
+          <p className="text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
+            <AnimatedText
+              text={subheading}
+              startIndex={headingPart1Words + headingPart2Words}
+            />
+          </p>
+
+          {/* Buttons */}
+          <div className="flex justify-center gap-4">
             <Link href="/thread">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8"
-              >
+              <button className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
                 Create Thread
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -118,18 +134,14 @@ export function AnimatedHero() {
                   <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
                   <path d="m15 5 4 4" />
                 </svg>
-              </motion.button>
+              </button>
             </Link>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8"
-            >
+            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
               Learn More
-            </motion.button>
-          </motion.div>
+            </button>
+          </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

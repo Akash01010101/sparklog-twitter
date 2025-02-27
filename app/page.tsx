@@ -19,6 +19,11 @@ import {
   Scale,
   ArrowRight,
   Check,
+  Sparkles,
+  Clock,
+  BarChart3,
+  Users,
+  Zap
 } from "lucide-react";
 
 import { AnimatedHero } from './components/animated-hero';
@@ -26,6 +31,7 @@ import { ThreadPreview } from './components/thread-preview';
 import { CustomerReviews } from './components/customer-reviews';
 import { FAQSection } from './components/faq-section';
 import { motion } from 'framer-motion';
+import { SplitFeatures } from './components/split-features';
 
 const navigationCards = [
   {
@@ -72,6 +78,45 @@ const navigationCards = [
   }
 ];
 
+const features = [
+  {
+    icon: Sparkles,
+    title: 'Smart Content Splitting',
+    description: 'Automatically split your long-form content into perfectly sized tweets',
+    points: ['AI-powered content analysis', 'Optimal tweet length suggestions', 'Hashtag recommendations']
+  },
+  {
+    icon: Clock,
+    title: 'Schedule & Automate',
+    description: 'Plan your content ahead with advanced scheduling features',
+    points: ['Flexible scheduling options', 'Time zone optimization', 'Queue management']
+  },
+  {
+    icon: Share2,
+    title: 'Cross-Platform Sharing',
+    description: 'Share your threads across multiple social platforms',
+    points: ['One-click multi-platform posting', 'Platform-specific formatting', 'Engagement tracking']
+  },
+  {
+    icon: BarChart3,
+    title: 'Analytics & Insights',
+    description: 'Track your thread performance with detailed analytics',
+    points: ['Engagement metrics', 'Audience insights', 'Performance reports']
+  },
+  {
+    icon: Users,
+    title: 'Team Collaboration',
+    description: 'Work together with your team seamlessly',
+    points: ['Real-time collaboration', 'Role-based permissions', 'Content approval workflow']
+  },
+  {
+    icon: Zap,
+    title: 'Lightning Fast Editor',
+    description: 'Create and edit threads with our intuitive editor',
+    points: ['Rich text formatting', 'Media integration', 'Thread preview']
+  }
+];
+
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
@@ -91,56 +136,47 @@ export default function HomePage() {
           <ThreadPreview />
         </div>
       </section>
-
-      {/* Main Navigation Cards */}
-      <section className="py-24 px-6 md:px-8 lg:px-12">
+    {/* Navigation Cards Section */}
+    <section className="py-24 px-6 md:px-8 lg:px-12 bg-background">
         <div className="container mx-auto max-w-7xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+            className="text-center mb-16"
           >
+            <h2 className="text-4xl font-bold mb-4">Quick Navigation</h2>
+            <p className="text-xl text-muted-foreground">Access all the tools and resources you need</p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {navigationCards.map((card, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                whileHover={{ scale: 1.02 }}
               >
                 <Link href={card.href}>
-                  <Card className="h-full transform transition-all duration-300 hover:shadow-xl hover:bg-accent/5 cursor-pointer group p-6">
-                    <CardHeader className="pb-6">
-                      <div className="flex items-center gap-6">
-                        <motion.div 
-                          className="p-4 rounded-lg bg-primary/10 transition-all duration-300 group-hover:bg-primary/20"
-                          whileHover={{ rotate: 5 }}
-                        >
-                          <card.icon className="h-8 w-8 text-primary" />
-                        </motion.div>
+                  <Card className="h-full hover:shadow-lg transition-all duration-300">
+                    <CardHeader>
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 rounded-lg bg-primary/10">
+                          <card.icon className="h-6 w-6 text-primary" />
+                        </div>
                         <div>
-                          <CardTitle className="text-2xl font-semibold mb-2">{card.title}</CardTitle>
-                          <CardDescription className="text-base text-muted-foreground">{card.description}</CardDescription>
+                          <CardTitle>{card.title}</CardTitle>
+                          <CardDescription>{card.description}</CardDescription>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-4">
+                      <ul className="space-y-2">
                         {card.features.map((feature, idx) => (
-                          <motion.li 
-                            key={idx} 
-                            className="flex items-center gap-3"
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: (index * 0.1) + (idx * 0.05) }}
-                          >
-                            <motion.div 
-                              className="h-2 w-2 rounded-full bg-primary transition-all duration-300 group-hover:bg-primary/80"
-                              whileHover={{ scale: 1.5 }}
-                            />
-                            <span className="text-lg text-muted-foreground group-hover:text-primary transition-all duration-300">{feature}</span>
-                          </motion.li>
+                          <li key={idx} className="flex items-center gap-2">
+                            <Check className="h-4 w-4 text-primary" />
+                            <span className="text-muted-foreground">{feature}</span>
+                          </li>
                         ))}
                       </ul>
                     </CardContent>
@@ -148,7 +184,57 @@ export default function HomePage() {
                 </Link>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+      <SplitFeatures />
+      {/* Features Grid */}
+      <section className="py-24 px-6 md:px-8 lg:px-12 bg-background">
+        <div className="container mx-auto max-w-7xl">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold mb-4">Powerful Features</h2>
+            <p className="text-xl text-muted-foreground">Everything you need to create engaging Twitter threads</p>
           </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ scale: 1.02 }}
+              >
+                <Card className="h-full hover:shadow-lg transition-all duration-300">
+                  <CardHeader>
+                    <div className="flex items-center gap-4">
+                      <div className="p-3 rounded-lg bg-primary/10">
+                        <feature.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle>{feature.title}</CardTitle>
+                        <CardDescription>{feature.description}</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-2">
+                      {feature.points.map((point, idx) => (
+                        <li key={idx} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary" />
+                          <span className="text-muted-foreground">{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -243,7 +329,7 @@ export default function HomePage() {
         >
           <h2 className="text-4xl font-bold mb-8">Ready to Start Creating?</h2>
           <p className="text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-            Join thousands of content creators who trust XThreadCraft for their Twitter presence
+            Join thousands of content creators who trust Sparklog for their Twitter presence
           </p>
           <Link href="/thread">
             <Button size="lg" className="gap-3 text-lg px-8 py-6">
