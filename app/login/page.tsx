@@ -44,7 +44,7 @@ export default function LoginPage() {
           <div className="space-y-2 text-center">
             <CardTitle className="text-3xl font-bold">Welcome Back</CardTitle>
             <p className="text-muted-foreground">
-              Sign in with Twitter to continue to Sparklog
+              Sign in with Twitter to continue to XThreadCraft
             </p>
           </div>
         </CardHeader>

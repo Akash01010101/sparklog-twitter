@@ -58,7 +58,7 @@ const navigationCards = [
   },
   {
     title: 'Documentation',
-    description: 'Learn how to use Sparklog',
+    description: 'Learn how to use XThreadCraftThread',
     icon: FileText,
     href: '/docs',
     features: ['Guides', 'API docs', 'Examples']
@@ -243,7 +243,7 @@ export default function HomePage() {
         >
           <h2 className="text-4xl font-bold mb-8">Ready to Start Creating?</h2>
           <p className="text-2xl text-muted-foreground mb-10 max-w-3xl mx-auto">
-            Join thousands of content creators who trust Sparklog for their Twitter presence
+            Join thousands of content creators who trust XThreadCraft for their Twitter presence
           </p>
           <Link href="/thread">
             <Button size="lg" className="gap-3 text-lg px-8 py-6">

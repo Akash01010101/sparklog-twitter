@@ -10,20 +10,20 @@ import {
 
 const faqs = [
   {
-    question: 'What is Sparklog?',
-    answer: 'Sparklog is a comprehensive Twitter thread management platform that helps content creators design, write, and schedule their Twitter threads efficiently. It provides tools for content organization, scheduling, and analytics.'
+    question: 'What is XThreadCraft?',
+    answer: 'XThreadCraft is a comprehensive Twitter thread management platform that helps content creators design, write, and schedule their Twitter threads efficiently. It provides tools for content organization, scheduling, and analytics.'
   },
   {
     question: 'How does thread scheduling work?',
-    answer: 'With Sparklog, you can create threads in advance and schedule them to be posted at optimal times. Our platform automatically splits your content into perfectly formatted tweets and posts them at your specified times.'
+    answer: 'With XThreadCraft, you can create threads in advance and schedule them to be posted at optimal times. Our platform automatically splits your content into perfectly formatted tweets and posts them at your specified times.'
   },
   {
     question: 'Can I manage multiple Twitter accounts?',
-    answer: 'Yes! Sparklog supports multiple Twitter account management. You can easily switch between accounts and manage content for different audiences from a single dashboard.'
+    answer: 'Yes! XThreadCraft supports multiple Twitter account management. You can easily switch between accounts and manage content for different audiences from a single dashboard.'
   },
   {
-    question: 'What analytics does Sparklog provide?',
-    answer: 'Sparklog offers comprehensive analytics including engagement rates, best posting times, audience growth, and content performance metrics to help you optimize your Twitter strategy.'
+    question: 'What analytics does XThreadCraft provide?',
+    answer: 'XThreadCraft offers comprehensive analytics including engagement rates, best posting times, audience growth, and content performance metrics to help you optimize your Twitter strategy.'
   },
   {
     question: 'Is there a free plan available?',
@@ -43,7 +43,7 @@ export function FAQSection() {
         >
           <h2 className="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Find answers to common questions about Sparklog and its features
+            Find answers to common questions about XThreadCraft and its features
           </p>
         </motion.div>
 

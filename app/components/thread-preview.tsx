@@ -69,7 +69,7 @@ export function ThreadPreview() {
                 <p className="text-sm text-muted-foreground">2/ Write, schedule, and manage your Twitter threads all in one place 📝</p>
               </div>
               <div className="p-4 bg-muted/50 rounded-lg">
-                <p className="text-sm text-muted-foreground">3/ Join thousands of content creators who trust Sparklog! 🌟</p>
+                <p className="text-sm text-muted-foreground">3/ Join thousands of content creators who trust XThreadCraft! 🌟</p>
               </div>
             </div>
           </div>

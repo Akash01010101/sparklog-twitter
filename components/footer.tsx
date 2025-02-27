@@ -22,14 +22,14 @@ const footerLinks = {
     { name: "Cookie Policy", href: "/legal/cookies" },
   ],
   social: [
-    { name: "Twitter", href: "https://twitter.com/sparklog", icon: Twitter },
-    { name: "Facebook", href: "https://facebook.com/sparklog", icon: Facebook },
-    { name: "Instagram", href: "https://instagram.com/sparklog", icon: Instagram },
-    { name: "LinkedIn", href: "https://linkedin.com/company/sparklog", icon: Linkedin },
-    { name: "GitHub", href: "https://github.com/sparklog", icon: Github },
+    { name: "Twitter", href: "https://twitter.com/xthreadcraft", icon: Twitter },
+    { name: "Facebook", href: "https://facebook.com/xthreadcraft", icon: Facebook },
+    { name: "Instagram", href: "https://instagram.com/xthreadcraft", icon: Instagram },
+    { name: "LinkedIn", href: "https://linkedin.com/company/xthreadcraft", icon: Linkedin },
+    { name: "GitHub", href: "https://github.com/xthreadcraft", icon: Github },
   ],
   contact: [
-    { icon: Mail, text: "support@sparklog.com", href: "mailto:support@sparklog.com" },
+    { icon: Mail, text: "support@XThreadCraft.com", href: "mailto:support@XThreadCraft.com" },
     { icon: Phone, text: "+1 (555) 123-4567", href: "tel:+15551234567" },
     { icon: MapPin, text: "123 Social Ave, Digital City, DC 12345", href: "#" },
   ],
@@ -44,7 +44,7 @@ export function Footer() {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center space-x-2 mb-4">
               <Twitter className="h-6 w-6 text-primary" />
-              <span className="font-bold text-xl">Sparklog</span>
+              <span className="font-bold text-xl">XThreadCraft</span>
             </Link>
             <p className="text-muted-foreground mb-6 max-w-sm">
               Create, manage and schedule your Twitter threads with ease. Optimize your social media presence.
@@ -120,7 +120,7 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Sparklog. All rights reserved.
+              © {new Date().getFullYear()} XThreadCraft. All rights reserved.
             </p>
             <div className="flex space-x-4">
               {footerLinks.social.map((social) => (

@@ -89,7 +89,7 @@ export default function PricingPage() {
             {[
               {
                 question: "Is it really free forever?",
-                answer: "Yes! Sparklog is completely free to use with all features included. No hidden fees or credit card required."
+                answer: "Yes! XThreadCraft is completely free to use with all features included. No hidden fees or credit card required."
               },
               {
                 question: "Are there any usage limits?",

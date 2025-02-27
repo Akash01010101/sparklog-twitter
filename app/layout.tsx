@@ -9,15 +9,15 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   metadataBase: new URL('https://sparklog-twitter.vercel.app'),
   title: {
-    default: "Sparklog - Twitter Thread Management Platform",
-    template: "%s | Sparklog"
+    default: "XThreadCraft - Twitter Thread Management Platform",
+    template: "%s | XThreadCraft"
   },
-  description: "Create, manage and schedule your Twitter threads with ease. Sparklog helps content creators optimize their social media presence with AI-powered tools and analytics.",
+  description: "Create, manage and schedule your Twitter threads with ease. XThreadCraft helps content creators optimize their social media presence with AI-powered tools and analytics.",
   keywords: ["Twitter", "thread", "social media", "content management", "scheduling", "automation", "AI writing", "analytics", "social media optimization"],
-  authors: [{ name: "Sparklog Team", url: "https://sparklog-twitter.vercel.app/team" }],
-  creator: "Sparklog",
-  publisher: "Sparklog",
-  applicationName: "Sparklog",
+  authors: [{ name: "XThreadCraft Team", url: "https://sparklog-twitter.vercel.app/team" }],
+  creator: "XThreadCraft",
+  publisher: "XThreadCraft",
+  applicationName: "XThreadCraft",
   category: "Social Media Tools",
   robots: {
     index: true,
@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://sparklog-twitter.vercel.app",
-    title: "Sparklog - Twitter Thread Management Platform",
+    title: "XThreadCraft - Twitter Thread Management Platform",
     description: "Create, manage and schedule your Twitter threads with ease using AI-powered tools",
-    siteName: "Sparklog",
+    siteName: "XThreadCraft",
     images: [{
       url: "https://sparklog-twitter.vercel.app/og-image.png",
       width: 1200,
@@ -57,10 +57,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sparklog - Twitter Thread Management Platform",
+    title: "XThreadCraft - Twitter Thread Management Platform",
     description: "Create, manage and schedule your Twitter threads with ease using AI-powered tools",
-    creator: "@sparklog",
-    site: "@sparklog",
+    creator: "@xthreadcraft",
+    site: "@xthreadcraft",
     images: ["https://sparklog-twitter.vercel.app/og-image.png"]
   },
   icons: {

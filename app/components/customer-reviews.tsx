@@ -10,7 +10,7 @@ const reviews = [
     name: 'Sarah Johnson',
     handle: '@sarahj_writes',
     avatar: 'SJ',
-    content: 'Sparklog has completely transformed how I manage my Twitter presence. The thread creation tool is intuitive and powerful! 🚀',
+    content: 'XThreadCraft has completely transformed how I manage my Twitter presence. The thread creation tool is intuitive and powerful! 🚀',
     rating: 5
   },
   {
@@ -24,7 +24,7 @@ const reviews = [
     name: 'Emma Davis',
     handle: '@emmawrites',
     avatar: 'ED',
-    content: 'Clean interface, great support, and amazing features. Sparklog makes thread creation a breeze! ✨',
+    content: 'Clean interface, great support, and amazing features. XThreadCraft makes thread creation a breeze! ✨',
     rating: 5
   },
   {
@@ -62,7 +62,7 @@ export function CustomerReviews() {
         >
           <h2 className="text-3xl font-bold mb-4">What Our Users Say</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Join thousands of content creators who trust Sparklog for their social media management
+            Join thousands of content creators who trust XThreadCraft for their social media management
           </p>
         </motion.div>
 
