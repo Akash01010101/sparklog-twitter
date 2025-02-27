@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Legal Information | Sparklog",
     description: "Privacy policy and data protection information for Sparklog users",
     type: "website",
-    url: "https://sparklog.com/legal"
+    url: "https://https://sparklog-twitter.vercel.app//legal"
   },
   twitter: {
     title: "Legal Information | Sparklog",
