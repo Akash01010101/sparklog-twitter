@@ -44,18 +44,20 @@ export function SavedThreads() {
         const data = await response.json();
         console.log("Fetched threads:", data.threads);
 
-        // Convert UTC timestamps to IST in 12-hour format
+        // Properly handle UTC timestamps and convert to IST
         setThreads(
           data.threads.map((thread: Thread) => ({
             ...thread,
-            created_at: new Date(thread.created_at + "Z").toLocaleString("en-IN", {
-              timeZone: "Asia/Kolkata",
-              dateStyle: "medium",
-              timeStyle: "short",
-              hour12: true,
-            }),
+            created_at: thread.created_at
+              ? new Date(thread.created_at).toLocaleString("en-IN", {
+                  timeZone: "Asia/Kolkata",
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                  hour12: true,
+                })
+              : "",
             scheduled_time: thread.scheduled_time
-              ? new Date(thread.scheduled_time + "Z").toLocaleString("en-IN", {
+              ? new Date(thread.scheduled_time).toLocaleString("en-IN", {
                   timeZone: "Asia/Kolkata",
                   dateStyle: "medium",
                   timeStyle: "short",
@@ -98,7 +100,7 @@ export function SavedThreads() {
       alert("Failed to delete thread. Please try again.");
     }
   };
-
+  
   const handleSchedule = async (date: Date) => {
     if (!session?.user?.email || !selectedThreadId) {
       console.error("Error: Missing user ID or thread ID");
@@ -117,7 +119,7 @@ export function SavedThreads() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           threadId: selectedThreadId,
-          title: selectedThread.title,  // Ensure title exists
+          title: selectedThread.title,
           content: selectedThread.content,
           scheduledAt: date.toISOString(),
           userId: session.user.email,
@@ -132,13 +134,13 @@ export function SavedThreads() {
       const { thread } = await response.json();
       console.log("Scheduled thread response:", thread);
   
-      // Update state with scheduled time and format it to IST
+      // Update state with scheduled time
       setThreads((prevThreads) =>
         prevThreads.map((t) =>
           t.id === selectedThreadId
             ? {
                 ...t,
-                scheduled_time: new Date(thread.scheduled_time + "Z").toLocaleString("en-IN", {
+                scheduled_time: new Date(date).toLocaleString("en-IN", {
                   timeZone: "Asia/Kolkata",
                   dateStyle: "medium",
                   timeStyle: "short",
