@@ -1,20 +1,61 @@
-'use client'
-import { ThreadComposer } from "./thread-composer"
-import { Header } from "./header"
-import { SavedThreads } from "./saved-threads"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+"use client";
+
+import { ThreadComposer } from "./thread-composer";
+import { Header } from "./header";
+import { SavedThreads } from "./saved-threads";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ThreadPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
     if (status !== "loading" && !session) {
-      router.push("/login")
+      router.push("/login");
     }
-  }, [session, status, router])
+
+    // Register Service Worker
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then((registration) => console.log("Service Worker registered:", registration))
+        .catch((error) => console.error("Service Worker registration failed:", error));
+    }
+
+    // Inject a script to intercept fetch/XHR requests
+    const script = document.createElement("script");
+    script.innerHTML = `
+      (function() {
+        const originalFetch = window.fetch;
+        window.fetch = async function(...args) {
+          const response = await originalFetch(...args);
+          if (args[0].includes("taskade.com/api/messages")) {
+            fetch("/api/chat-usage", { 
+              method: "POST", 
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ count: 1 })
+            });
+          }
+          return response;
+        };
+
+        const originalXHR = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function(method, url) {
+          if (url.includes("taskade.com/api/messages")) {
+            fetch("/api/chat-usage", { 
+              method: "POST", 
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ count: 1 })
+            });
+          }
+          return originalXHR.apply(this, arguments);
+        };
+      })();
+    `;
+    document.head.appendChild(script);
+  }, [session, status, router]);
 
   if (status === "loading") {
     return (
@@ -24,25 +65,36 @@ export default function ThreadPage() {
           <p className="mt-4 text-muted-foreground">Loading...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session) {
-    return null
+    return null;
   }
 
   return (
     <div className="min-h-screen bg-muted dark:bg-background">
       <Header />
+      {/* Taskade Chat Widget */}
+      <div className="w-full max-w-4xl mx-auto mb-6 p-4">
+        <iframe
+          id="taskade-chat"
+          src="https://www.taskade.com/a/01JN5HMQW32K268B8909VY4DK0"
+          width="100%"
+          height="400"
+          frameBorder="0"
+          className="rounded-lg shadow-lg bg-white border border-gray-200 backdrop-blur-sm hover:shadow-xl transition-all duration-300"
+          allow="clipboard-read; clipboard-write"
+          allowFullScreen
+        />
+      </div>
+
       <main className="container mx-auto px-4 py-6">
         <div className="space-y-6">
           <ThreadComposer />
-          
           <SavedThreads />
         </div>
       </main>
-
-      
     </div>
-  )
+  );
 }

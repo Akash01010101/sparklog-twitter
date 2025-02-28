@@ -1,9 +1,15 @@
 import { NextAuthOptions } from "next-auth";
 import TwitterProvider from "next-auth/providers/twitter";
 
-// Extend the session type to include Twitter OAuth 1.0a tokens
+// Extend session and JWT types to include Twitter user ID
 declare module "next-auth" {
   interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
     accessToken?: string;
     accessSecret?: string;
   }
@@ -11,6 +17,7 @@ declare module "next-auth" {
 
 declare module "next-auth/jwt" {
   interface JWT {
+    id?: string; // Twitter user ID
     accessToken?: string;
     accessSecret?: string;
   }
@@ -36,15 +43,35 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, account }) {
-      if (account && "oauth_token" in account && "oauth_token_secret" in account) {
+      console.log("🔹 JWT Callback - Token Before:", token);
+
+      if (token.sub) {
+        token.id = token.sub; // Assign Twitter user ID
+      }
+      if (account) {
         token.accessToken = account.oauth_token as string;
         token.accessSecret = account.oauth_token_secret as string;
       }
+
+      console.log("✅ JWT Callback - Token After:", token);
       return token;
     },
     async session({ session, token }) {
+      console.log("🔹 Session Callback - Token:", token);
+
+      if (!session.user) {
+        session.user = {
+          id: "",
+          name: null,
+          email: null,
+          image: null
+        };
+      }
+      session.user.id = token.id as string; // Attach Twitter user ID
       session.accessToken = token.accessToken;
       session.accessSecret = token.accessSecret;
+
+      console.log("✅ Session Callback - Final Session:", session);
       return session;
     },
   },
