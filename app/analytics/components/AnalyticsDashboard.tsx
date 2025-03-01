@@ -194,6 +194,33 @@ export function AnalyticsDashboard({ tweets }: AnalyticsDashboardProps) {
           </div>
         </CardContent>
       </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>All Tweets</CardTitle>
+          <CardDescription>Complete list of your tweets and their performance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {tweets.map((tweet, index) => (
+              <motion.div
+                key={tweet.id}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.05 }}
+                className="p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors"
+              >
+                <p className="text-sm text-card-foreground mb-2">{tweet.text}</p>
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>{tweet.public_metrics.like_count} likes</span>
+                  <span>{tweet.public_metrics.retweet_count} retweets</span>
+                  <span>{tweet.public_metrics.reply_count} replies</span>
+                  <span>{tweet.public_metrics.quote_count} quotes</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
