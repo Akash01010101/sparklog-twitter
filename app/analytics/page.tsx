@@ -15,17 +15,51 @@ interface Tweet {
   };
 }
 
+interface CachedData {
+  tweets: Tweet[];
+  timestamp: number;
+}
+
+const CACHE_DURATION = 1000 * 60 * 60; // 1 hour in milliseconds
+
 export default function AnalyticsPage() {
   const { data: session, status } = useSession();
   const [tweets, setTweets] = useState<Tweet[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const getCachedData = (): CachedData | null => {
+    const cachedData = localStorage.getItem('analyticsData');
+    if (!cachedData) return null;
+    return JSON.parse(cachedData);
+  };
+
+  const setCachedData = (tweets: Tweet[]) => {
+    const data: CachedData = {
+      tweets,
+      timestamp: Date.now(),
+    };
+    localStorage.setItem('analyticsData', JSON.stringify(data));
+  };
+
+  const isCacheValid = (timestamp: number): boolean => {
+    return Date.now() - timestamp < CACHE_DURATION;
+  };
+
   useEffect(() => {
     const fetchAnalytics = async () => {
       if (!session?.user?.id) return;
 
       try {
+        // Check cache first
+        const cachedData = getCachedData();
+        if (cachedData && isCacheValid(cachedData.timestamp)) {
+          setTweets(cachedData.tweets);
+          setLoading(false);
+          return;
+        }
+
+        // If cache is invalid or doesn't exist, fetch from API
         const res = await fetch(`/api/analytics?userId=${session.user.id}`);
         const data = await res.json();
 
@@ -33,7 +67,9 @@ export default function AnalyticsPage() {
           throw new Error(data.error || "Failed to fetch analytics.");
         }
 
-        setTweets(data.data || []);
+        const newTweets = data.data || [];
+        setTweets(newTweets);
+        setCachedData(newTweets); // Cache the new data
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);

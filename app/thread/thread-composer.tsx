@@ -6,9 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { ImageIcon, SaveIcon, Loader2 } from "lucide-react";
+import { ImageIcon, SaveIcon, Loader2, BarChart } from "lucide-react";
 import { ThreadPreview } from "./thread-preview";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 interface Tweet {
   content: string;
@@ -267,6 +268,12 @@ export function ThreadComposer() {
       >
         <ThreadPreview tweets={tweets} />
         <div className="mt-6 flex justify-end space-x-4">
+          <Link href="/analytics">
+            <Button variant="outline" className="gap-2">
+              <BarChart className="h-4 w-4" />
+              Analytics
+            </Button>
+          </Link>
           <Button
             variant="outline"
             onClick={handleSave}
