@@ -6,6 +6,7 @@ import { SavedThreads } from "./saved-threads";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { TurnstileWrapper } from "./turnstile-wrapper";
 
 export default function ThreadPage() {
   const { data: session, status } = useSession();
@@ -14,14 +15,6 @@ export default function ThreadPage() {
   useEffect(() => {
     if (status !== "loading" && !session) {
       router.push("/login");
-    }
-
-    // Register Service Worker
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/service-worker.js")
-        .then((registration) => console.log("Service Worker registered:", registration))
-        .catch((error) => console.error("Service Worker registration failed:", error));
     }
 
     // Inject a script to intercept fetch/XHR requests
@@ -75,20 +68,21 @@ export default function ThreadPage() {
   return (
     <div className="min-h-screen bg-muted dark:bg-background">
       <Header />
-      {/* Taskade Chat Widget */}
       <div className="w-full max-w-4xl mx-auto mb-6 p-4">
-        <iframe
-          id="taskade-chat"
-          src="https://www.taskade.com/a/01JN5HMQW32K268B8909VY4DK0"
-          width="100%"
-          height="400"
-          frameBorder="0"
-          className="rounded-lg shadow-lg bg-white border border-gray-200 backdrop-blur-sm hover:shadow-xl transition-all duration-300"
-          allow="clipboard-read; clipboard-write"
-          allowFullScreen
-        />
+        <TurnstileWrapper>
+          <iframe
+            id="taskade-chat"
+            src="https://www.taskade.com/a/01JN5HMQW32K268B8909VY4DK0"
+            width="100%"
+            height="400"
+            frameBorder="0"
+            className="rounded-lg shadow-lg bg-white border border-gray-200 backdrop-blur-sm hover:shadow-xl transition-all duration-300"
+            allow="clipboard-read; clipboard-write"
+            allowFullScreen
+          />
+        </TurnstileWrapper>
       </div>
-
+      
       <main className="container mx-auto px-4 py-6">
         <div className="space-y-6">
           <ThreadComposer />

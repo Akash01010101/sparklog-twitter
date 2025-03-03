@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { sql } from "@vercel/postgres";
+import { supabase } from "@/lib/supabase";
 
 export async function POST() {
   try {
@@ -11,23 +11,44 @@ export async function POST() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    // Increment chat usage count for the user
-    await sql`
-      INSERT INTO chat_usage (user_id, usage_count, last_used)
-      VALUES (${session.user.email}, 1, CURRENT_TIMESTAMP)
-      ON CONFLICT (user_id)
-      DO UPDATE SET 
-        usage_count = chat_usage.usage_count + 1,
-        last_used = CURRENT_TIMESTAMP;
-    `;
+    const userId = session.user.email;
+
+    // Fetch current usage count
+    const { data: userData, error: fetchError } = await supabase
+      .from("chat_usage")
+      .select("usage_count, verification_count")
+      .eq("user_id", userId)
+      .single();
+
+    if (fetchError && fetchError.code !== "PGRST116") { // Ignore "No rows found" error
+      console.error("Error fetching chat usage:", fetchError);
+      return NextResponse.json({ error: "Failed to update chat usage" }, { status: 500 });
+    }
+
+    const newUsageCount = userData ? userData.usage_count + 1 : 1;
+
+    // Upsert chat usage with incremented count
+    const { error: upsertError } = await supabase
+      .from("chat_usage")
+      .upsert(
+        {
+          user_id: userId,
+          usage_count: newUsageCount,
+          last_used: new Date().toISOString(),
+          verification_count: userData?.verification_count ?? 0,
+        },
+        { onConflict: "user_id" }
+      );
+
+    if (upsertError) {
+      console.error("Error in upsert operation:", upsertError);
+      return NextResponse.json({ error: "Failed to update chat usage" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error updating chat usage:", error);
-    return NextResponse.json(
-      { error: "Failed to update chat usage" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update chat usage" }, { status: 500 });
   }
 }
 
@@ -39,20 +60,22 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const result = await sql`
-      SELECT usage_count, last_used
-      FROM chat_usage
-      WHERE user_id = ${session.user.email};
-    `;
+    const { data: result, error } = await supabase
+      .from("chat_usage")
+      .select("usage_count, last_used, verification_count")
+      .eq("user_id", session.user.email)
+      .single();
 
-    const usageData = result.rows[0] || { usage_count: 0, last_used: null };
+    if (error && error.code !== "PGRST116") {
+      console.error("Error fetching chat usage:", error);
+      return NextResponse.json({ error: "Failed to fetch chat usage" }, { status: 500 });
+    }
+
+    const usageData = result ?? { usage_count: 0, last_used: null, verification_count: 0 };
 
     return NextResponse.json(usageData, { status: 200 });
   } catch (error) {
     console.error("Error fetching chat usage:", error);
-    return NextResponse.json(
-      { error: "Failed to fetch chat usage" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch chat usage" }, { status: 500 });
   }
 }

@@ -19,10 +19,10 @@ export default function PricingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Free Forever
+              Simple, Transparent Pricing
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              All features included, no credit card required
+              Choose the plan that works best for you
             </p>
           </div>
         </div>
@@ -30,16 +30,16 @@ export default function PricingPage() {
 
       <AnimatedSection delay={0.2} className="py-20 px-4 md:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
-          <div className="flex justify-center">
+          <div className="grid md:grid-cols-2 gap-8 justify-center">
             <motion.div
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
-              className="w-full max-w-lg"
+              className="w-full"
             >
-              <Card className="border-primary shadow-lg">
+              <Card className="h-full border-primary shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">Everything You Need</CardTitle>
-                  <CardDescription>Start creating amazing content today</CardDescription>
+                  <CardTitle className="text-2xl">Free Plan</CardTitle>
+                  <CardDescription>Perfect for getting started</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
                   <div className="mb-6">
@@ -48,13 +48,59 @@ export default function PricingPage() {
                   </div>
                   <ul className="space-y-3">
                     {[
-                      "Unlimited Social Accounts",
-                      "Advanced Content Editor",
-                      "Unlimited Posts",
-                      "Advanced Analytics",
-                      "Auto-split Content",
-                      "Team Collaboration",
+                      "2 Verifications per Day",
+                      "Basic Content Editor",
+                      "Thread Creation",
+                      "Basic Analytics",
                       "Community Support"
+                    ].map((feature, idx) => (
+                      <motion.li
+                        key={idx}
+                        initial={{ opacity: 0, x: -10 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="flex items-center gap-2"
+                      >
+                        <Check className="h-5 w-5 text-primary" />
+                        <span>{feature}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </CardContent>
+                <CardFooter>
+                  <Button 
+                    className="w-full bg-primary/10 hover:bg-primary/20 text-primary"
+                  >
+                    Get Started
+                  </Button>
+                </CardFooter>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.2 }}
+              className="w-full"
+            >
+              <Card className="h-full border-primary shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">Pro Plan</CardTitle>
+                  <CardDescription>For power users</CardDescription>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                  <div className="mb-6">
+                    <span className="text-4xl font-bold">$5</span>
+                    <span className="text-muted-foreground">/month</span>
+                  </div>
+                  <ul className="space-y-3">
+                    {[
+                      "Unlimited Verifications",
+                      "Advanced Content Editor",
+                      "Unlimited Thread Creation",
+                      "Advanced Analytics",
+                      "Priority Support",
+                      "Team Collaboration",
+                      "Early Access to New Features"
                     ].map((feature, idx) => (
                       <motion.li
                         key={idx}
@@ -73,7 +119,7 @@ export default function PricingPage() {
                   <Button 
                     className="w-full bg-primary hover:bg-primary/90"
                   >
-                    Get Started Now
+                    Upgrade to Pro
                   </Button>
                 </CardFooter>
               </Card>
@@ -88,26 +134,32 @@ export default function PricingPage() {
           <AnimatedList className="grid gap-6 text-left" staggerDelay={0.1}>
             {[
               {
-                question: "Is it really free forever?",
-                answer: "Yes! XThreadCraft is completely free to use with all features included. No hidden fees or credit card required."
+                question: "What's included in the free plan?",
+                answer: "The free plan includes 2 verifications per day, basic content editing features, thread creation, and basic analytics. It's perfect for casual users."
               },
               {
-                question: "Are there any usage limits?",
-                answer: "No, you can use all features without any restrictions. Create as many threads as you want!"
+                question: "Can I upgrade or downgrade at any time?",
+                answer: "Yes! You can upgrade to the Pro plan whenever you need more features, or downgrade back to the free plan at any time."
               },
               {
-                question: "Do you offer support?",
-                answer: "Yes, we provide community support to all users through our help center and community forums."
+                question: "Do you offer refunds?",
+                answer: "Yes, we offer a 30-day money-back guarantee for our Pro plan. If you're not satisfied, we'll refund your payment."
               },
               {
-                question: "How do you sustain a free service?",
-                answer: "We believe in building a great product that's accessible to everyone. We're supported by our amazing community and optional donations."
+                question: "Is there a long-term contract?",
+                answer: "No, our Pro plan is billed monthly and you can cancel at any time. There are no long-term commitments required."
               }
-            ].map((faq, index) => (
-              <div key={index} className="space-y-2">
-                <h3 className="font-semibold text-lg text-foreground dark:text-foreground">{faq.question}</h3>
-                <p className="text-muted-foreground dark:text-muted-foreground">{faq.answer}</p>
-              </div>
+            ].map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1 }}
+                className="space-y-2"
+              >
+                <h3 className="font-semibold text-lg">{faq.question}</h3>
+                <p className="text-muted-foreground">{faq.answer}</p>
+              </motion.div>
             ))}
           </AnimatedList>
         </div>
