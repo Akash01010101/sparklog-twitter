@@ -42,25 +42,9 @@ export function ThreadComposer() {
   }, []);
 
   const splitTweet = (text: string): string[] => {
-    const words = text.split(" ");
-    const tweets: string[] = [];
-    let currentTweet = "";
+    return text.split("___").map(part => part.trim()).filter(part => part.length > 0);
+};
 
-    words.forEach((word) => {
-      if ((currentTweet + " " + word).trim().length <= MAX_TWEET_LENGTH) {
-        currentTweet += (currentTweet ? " " : "") + word;
-      } else {
-        tweets.push(currentTweet.trim());
-        currentTweet = word;
-      }
-    });
-
-    if (currentTweet) {
-      tweets.push(currentTweet.trim());
-    }
-
-    return tweets;
-  };
 
   const handleAddTweet = () => {
     if (content.trim() || currentImageFile) {
@@ -227,7 +211,7 @@ export function ThreadComposer() {
                 className="w-full mb-4"
               />
               <Textarea
-                placeholder="What's happening?"
+                placeholder="Add your long text here to split it into tweets. Use the delimiter '___' to separate tweets manually or use the AI for copywriting and generate threads."
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 className="w-full min-h-[100px] resize-none"
@@ -266,7 +250,7 @@ export function ThreadComposer() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2, type: "spring", stiffness: 100 }}
       >
-        <ThreadPreview tweets={tweets} />
+        <ThreadPreview tweets={tweets} setTweets={setTweets} />
         <div className="mt-6 flex justify-end space-x-4">
           <Link href="/analytics">
             <Button variant="outline" className="gap-2">

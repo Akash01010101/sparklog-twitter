@@ -3,18 +3,42 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 interface Tweet {
   content: string;
   imageFile?: File;
+  imageUrl?: string; // Store preview URL
 }
 
 interface ThreadPreviewProps {
   tweets: Tweet[];
+  setTweets: (tweets: Tweet[]) => void; // Allow updating tweets
 }
 
-export function ThreadPreview({ tweets }: ThreadPreviewProps) {
+export function ThreadPreview({ tweets, setTweets }: ThreadPreviewProps) {
   const { data: session } = useSession();
+  const handleDeleteTweet = (index: number) => {
+    setTweets(tweets.filter((_, i) => i !== index));
+  };
+  
+  const handleMoveTweet = (index: number, direction: "up" | "down") => {
+    const newTweets = [...tweets];
+    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    [newTweets[index], newTweets[swapIndex]] = [newTweets[swapIndex], newTweets[index]];
+    setTweets(newTweets);
+  };
+  
+
+  const handleImageChange = (index: number, file: File | null) => {
+    if (!file) return;
+
+    const newTweets = [...tweets];
+    newTweets[index].imageFile = file;
+    newTweets[index].imageUrl = URL.createObjectURL(file);
+    setTweets(newTweets);
+  };
+
   return (
     <div className="space-y-6">
       {tweets.map((tweet, index) => (
@@ -35,23 +59,54 @@ export function ThreadPreview({ tweets }: ThreadPreviewProps) {
             <div className="flex-1 space-y-2">
               <div className="flex items-center space-x-2">
                 <div className="font-semibold text-foreground dark:text-foreground/90">
-                  {session?.user?.name || "User Name"}
+                  {session?.user?.name ?? "User Name"}
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-muted-foreground/80">
                   Tweet {index + 1}
                 </div>
               </div>
-              <p className="text-foreground/80 dark:text-foreground/70 leading-relaxed">
-                {tweet.content}
-              </p>
-              {tweet.imageFile && (
+              <textarea
+                value={tweet.content}
+                onChange={(e) => {
+                  const newTweets = [...tweets];
+                  newTweets[index].content = e.target.value;
+                  setTweets(newTweets);
+                }}
+                className="w-full bg-transparent border border-border dark:border-border/50 rounded-lg p-2 text-foreground dark:text-foreground/80 focus:outline-none focus:ring-2 focus:ring-primary/50"
+                rows={2}
+              />
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleMoveTweet(index, "up")}
+                  disabled={index === 0}
+                  className="p-2 bg-primary/10 hover:bg-primary/20 rounded-md text-sm disabled:opacity-50"
+                >
+                  ⬆️
+                </button>
+                <button
+                  onClick={() => handleMoveTweet(index, "down")}
+                  disabled={index === tweets.length - 1}
+                  className="p-2 bg-primary/10 hover:bg-primary/20 rounded-md text-sm disabled:opacity-50"
+                >
+                  ⬇️
+                </button>
+                <button
+                  onClick={() => handleDeleteTweet(index)}
+                  className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
+                >
+                  ❌
+                </button>
+              </div>
+
+              {/* Image Preview */}
+              {tweet.imageUrl && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="mt-3 relative rounded-lg overflow-hidden bg-muted dark:bg-muted/30 border border-border dark:border-border/50 group-hover:border-primary/20 dark:group-hover:border-primary/30 transition-all duration-300"
                 >
                   <Image
-                    src={URL.createObjectURL(tweet.imageFile)}
+                    src={tweet.imageUrl}
                     alt="Tweet image"
                     width={400}
                     height={300}
@@ -59,10 +114,19 @@ export function ThreadPreview({ tweets }: ThreadPreviewProps) {
                   />
                 </motion.div>
               )}
+
+              {/* Image Upload Input */}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageChange(index, e.target.files?.[0] || null)}
+                className="mt-2 text-sm text-primary cursor-pointer file:hidden"
+              />
             </div>
           </div>
         </motion.div>
       ))}
+
       {tweets.length === 0 && (
         <div className="text-center py-8 text-muted-foreground dark:text-muted-foreground/70 bg-background/50 dark:bg-background/30 backdrop-blur-sm rounded-lg border border-border dark:border-border/50">
           <p>Your thread preview will appear here</p>
