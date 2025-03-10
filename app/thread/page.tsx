@@ -67,7 +67,7 @@ export default function ThreadPage() {
 
   return (
     <div className="min-h-screen bg-muted dark:bg-background">
-      <Header />
+      
       <div className="w-full max-w-4xl mx-auto mb-6 p-4">
         <TurnstileWrapper>
           <iframe

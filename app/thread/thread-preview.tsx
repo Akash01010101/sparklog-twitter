@@ -76,26 +76,27 @@ export function ThreadPreview({ tweets, setTweets }: ThreadPreviewProps) {
                 rows={2}
               />
               <div className="flex space-x-2">
-                <button
-                  onClick={() => handleMoveTweet(index, "up")}
-                  disabled={index === 0}
-                  className="p-2 bg-primary/10 hover:bg-primary/20 rounded-md text-sm disabled:opacity-50"
-                >
-                  ⬆️
-                </button>
-                <button
-                  onClick={() => handleMoveTweet(index, "down")}
-                  disabled={index === tweets.length - 1}
-                  className="p-2 bg-primary/10 hover:bg-primary/20 rounded-md text-sm disabled:opacity-50"
-                >
-                  ⬇️
-                </button>
-                <button
-                  onClick={() => handleDeleteTweet(index)}
-                  className="p-2 bg-red-500 hover:bg-red-600 text-white rounded-md text-sm"
-                >
-                  ❌
-                </button>
+              <button
+                onClick={() => handleMoveTweet(index, "up")}
+                disabled={index === 0}
+                className="p-2 bg-gray-800 text-white hover:bg-gray-600 rounded-md text-sm disabled:opacity-50"
+              >
+                ▲
+              </button>
+              <button
+                onClick={() => handleMoveTweet(index, "down")}
+                disabled={index === tweets.length - 1}
+                className="p-2 bg-gray-800 text-white hover:bg-gray-600 rounded-md text-sm disabled:opacity-50"
+              >
+                ▼
+              </button>
+              <button
+                onClick={() => handleDeleteTweet(index)}
+                className="p-2 bg-red-700 text-white hover:bg-red-500 rounded-md text-sm"
+              >
+                ✖
+              </button>
+
               </div>
 
               {/* Image Preview */}
