@@ -118,7 +118,7 @@ export function AnimatedHero() {
           <div className="flex justify-center gap-4">
             <Link href="/thread">
               <button className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8">
-                Create Thread
+                Free Forever
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -136,9 +136,7 @@ export function AnimatedHero() {
                 </svg>
               </button>
             </Link>
-            <button className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
-              Learn More
-            </button>
+            
           </div>
         </div>
       </div>

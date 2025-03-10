@@ -3,7 +3,8 @@ import AuthProvider from "@/components/session-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { Inter } from "next/font/google";
-
+import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -86,7 +87,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider><Header />
+            <main>{children}</main>
+            <Footer /></AuthProvider>
         </ThemeProvider>
       </body>
     </html>
