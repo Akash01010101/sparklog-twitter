@@ -67,7 +67,9 @@ export function ThreadComposer() {
 
   const handleSave = async () => {
     if (!session?.user?.email) {
+      console.log("Session:", session);
       console.error("User not authenticated.");
+      
       return;
     }
   

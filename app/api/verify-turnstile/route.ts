@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     });
 
     const outcome = await result.json();
-
+    
     if (outcome.success) {
       const session = await getServerSession(authOptions);
 
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({ success: true });
     } else {
-      return NextResponse.json({ success: false, error: 'Invalid CAPTCHA' });
+      return NextResponse.json({ success: false, error: outcome.error });
     }
   } catch (error) {
     console.error('Error verifying turnstile:', error);
