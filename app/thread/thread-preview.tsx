@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import SearchExperience from "../test/page";
+
 
 interface Tweet {
   content: string;
@@ -18,7 +18,7 @@ interface ThreadPreviewProps {
 }
 
 export function ThreadPreview({ tweets, setTweets }: ThreadPreviewProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  
   const { data: session } = useSession();
   const handleDeleteTweet = (index: number) => {
     setTweets(tweets.filter((_, i) => i !== index));
@@ -136,37 +136,7 @@ export function ThreadPreview({ tweets, setTweets }: ThreadPreviewProps) {
               />
 
 <div>
-      {/* Button to open popup */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="mt-2 px-4 py-2 text-sm text-white bg-blue-500 rounded cursor-pointer"
-      >
-        GIF Search
-      </button>
-
-      {/* Modal */}
-      {isOpen && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 relative">
-    
-      {/* Close Button */}
-      <button
-        onClick={() => setIsOpen(false)}
-        className="absolute top-3 right-3 text-2xl text-gray-600 hover:text-gray-900"
-      >
-        &times;
-      </button>
-
-      {/* Header */}
-      <div className="text-center">
-        <h2 className="text-lg font-semibold">Search for GIFs</h2>
-        <p className="text-sm text-gray-500">Powered by GIPHY</p>
-      </div>
-
-      {/* GIF Search Component */}
-      <SearchExperience />
-    </div>
-  
-)}
+      
 
     </div>
             </div>
