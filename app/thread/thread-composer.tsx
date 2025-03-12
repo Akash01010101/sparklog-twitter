@@ -239,7 +239,7 @@ export function ThreadComposer() {
                 {/* Button to open popup */}
       <button
         onClick={() => setIsOpen(true)}
-        className="mt-2 px-4 py-2 text-sm text-white bg-blue-500 rounded cursor-pointer"
+        className="mt-2 px-4 py-2 text-sm text-white bg-black-100 rounded cursor-pointer"
       >
         GIF Search
       </button>
